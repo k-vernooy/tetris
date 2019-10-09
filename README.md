@@ -1,7 +1,7 @@
 # tetris
 My rendition of the fantastic tetris game.
 
-## Install
+## Installation
 ### Git:
 ```bash
 git clone thisurl && cd thisurl
@@ -11,8 +11,10 @@ make install
 ### Homebrew:
 Coming on project completion...
 
-## Control
+## Usage 
+### Control:
 Use the arrow keys or `WASD` to control the falling blocks:
 - Up: Rotate block
 - Down: Move block down
 - Left/Right: Move block left/right
+

@@ -3,6 +3,8 @@
 #include <string>
 #include <sstream>
 #include <ncurses.h>
+#include <unistd.h>
+
 
 #include "../include/tetris.hpp"
 
@@ -17,11 +19,26 @@ int main(int argc, char ** argv) {
 
     setlocale(LC_CTYPE, "");
     initscr();
+    noecho();
+    keypad(stdscr, TRUE);
+    nodelay(stdscr, TRUE);
 
     Screen screen(screenstr);
-    screen.draw();
-    
-    getch();
+    int score = 0;
+    while (true) {
+
+        unsigned int microseconds = 20000;
+        usleep(microseconds);
+
+        wmove(stdscr,0,0);
+        int ch = getch();
+
+        screen.updateScore(score);
+        screen.draw();
+        // mvprintw(0,0,to_string(ch).c_str());
+        wrefresh(stdscr);
+        score++;
+    }
     endwin();
 
     return 0;

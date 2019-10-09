@@ -43,13 +43,25 @@ Screen::Screen(string screenstr) {
 void Screen::draw() {
     for ( int i = 0; i < window.size(); i++ ) {
         for ( int j = 0; j < window[i].size(); j++) {
-            string temp = window[i][j];
-            const char *character = temp.c_str();
-            printw("%s", character);
+            printw(window[i][j].c_str());
         }
-
-        string nl = "\n";
-        const char *newline = nl.c_str();
-        printw("%s",newline);
+        printw(string("\n").c_str());
     }
+}
+
+void Screen::updateScore(int score) {
+    int x = 13;
+    int y = 36;
+
+    // string str = to_string(score);
+    window[x][y] = to_string(score);
+
+    for ( int z = 37; z < 42; z++ ) {
+        window[x][z] = " ";
+    }
+
+    for ( int i = 1; i < to_string(score).length(); i++ ) {
+        window[x][y + i] = "";
+    }
+    // window[x][y + 1] = "";
 }

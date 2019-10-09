@@ -1,5 +1,7 @@
 #include "../include/tetris.hpp"
 #include <fstream>
+#include <ncurses.h>
+#include <cstring>
 
 using namespace std;
 
@@ -41,8 +43,13 @@ Screen::Screen(string screenstr) {
 void Screen::draw() {
     for ( int i = 0; i < window.size(); i++ ) {
         for ( int j = 0; j < window[i].size(); j++) {
-            cout << window[i][j];
+            string temp = window[i][j];
+            const char *character = temp.c_str();
+            printw("%s", character);
         }
-        cout << endl;
+
+        string nl = "\n";
+        const char *newline = nl.c_str();
+        printw("%s",newline);
     }
 }

@@ -18,5 +18,61 @@ class Screen {
 };
 
 class Shape {
-    vector<int> coords;
+    public:
+    Shape();
+    vector<vector<vector<bool> > > shapecoords = {
+        {
+            // the 'o' block
+            {1,1,0,0},
+            {1,1,0,0},
+            {0,0,0,0},
+            {0,0,0,0}
+        },
+        {
+            // the long block
+            {1,1,1,1},
+            {0,0,0,0},
+            {0,0,0,0},
+            {0,0,0,0}
+        },
+        {
+            // the l block
+            {1,1,0,0},
+            {1,0,0,0},
+            {1,0,0,0},
+            {0,0,0,0}
+        },
+        {
+            // the j block
+            {1,1,0,0},
+            {0,1,0,0},
+            {0,1,0,0},
+            {0,0,0,0}
+        },
+        {
+            // the zag block
+            {0,1,0,0},
+            {1,1,0,0},
+            {1,0,0,0},
+            {0,0,0,0}
+        },
+        {
+            // the zig block
+            {1,0,0,0},
+            {1,1,0,0},
+            {0,1,0,0},
+            {0,0,0,0}
+        },
+        {
+            // the t block
+            {0,1,0,0},
+            {1,1,1,0},
+            {0,0,0,0},
+            {0,0,0,0}
+        }
+    };
+
+    vector<vector<bool> > shape;
+    void draw();
+    void rotate();
 };

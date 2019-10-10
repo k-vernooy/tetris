@@ -32,12 +32,15 @@ int main(int argc, char ** argv) {
     int frameRate = 10;
     bool newShape = true;
 
+    Shape shape;
+
     while (true) {
-        if ( newShape ) {
-            Shape shape;
-            // shape.drop();
-            newShape = false;
-        }
+
+        // if ( newShape ) {
+        //     shape.generate();
+        //     shape.drop();
+        //     newShape = false;
+        // }
 
         // if ( shape.isDropping && count % frameRate == 0) {
         //     shape.drop();
@@ -57,12 +60,26 @@ int main(int argc, char ** argv) {
         usleep(microseconds);
 
         wmove(stdscr,0,0);
+
         int ch = getch();
 
         if ( ch ) {
-
+            switch (ch) {
+                // case KEY_BACKSPACE: /* user pressed backspace */ 
+                //     ...
+                case KEY_UP:
+                    shape.rotate();
+                    break;
+                case KEY_DOWN:
+                    shape.move(3);
+                    break;
+                case ' ':
+                    shape.ground(frameRate);
+                    break;
+            }
         }
-        // screen.updateScore(score);
+
+        screen.updateScore(count);
         screen.draw();
         wrefresh(stdscr);
 

@@ -2,16 +2,13 @@
 #include <fstream>
 #include <ncurses.h>
 #include <cstring>
+#include <cstdlib>
 
 using namespace std;
 
 string readLine(string str, int n) {
    stringstream f(str);
    string s;
-   //for performance
-//    s.reserve(some_reasonable_max_line_length);    
-
-   //skip N lines
    for (int i = 0; i < n; i++) {
        getline(f, s);
    }
@@ -53,7 +50,6 @@ void Screen::updateScore(int score) {
     int x = 13;
     int y = 36;
 
-    // string str = to_string(score);
     window[x][y] = to_string(score);
 
     for ( int z = 37; z < 42; z++ ) {
@@ -63,5 +59,54 @@ void Screen::updateScore(int score) {
     for ( int i = 1; i < to_string(score).length(); i++ ) {
         window[x][y + i] = "";
     }
-    // window[x][y + 1] = "";
+}
+
+
+void Screen::gameOver() {
+    gameover = true;
+    // window[9][12] = "die";
+}
+// basically a constructor
+void Shape::generate() {
+    vector<vector<bool> > selected = shapecoords[(rand() % shapecoords.size()) + 1];
+        
+    for ( int row = 0; row < selected.size(); row++ ) {
+        bool found = false;
+        for ( int cell = 0; cell < selected[row].size(); cell++ ) {
+            if (selected[row][cell] == 1) {
+                found = true;
+            }
+        }
+        if ( found ) {
+            shapeHeight++;
+        }
+    }
+}
+
+void Shape::drop() {
+    bool cannotDrop;
+
+    if ( cannotDrop ) {
+        // gameOver();
+    }
+}
+
+void Shape::rotate() {
+
+}
+
+void Shape::draw() {
+
+}
+
+void Shape::fall() {
+
+}
+
+void Shape::move(int movetype) {
+
+}
+
+void Shape::ground(int framerate) {
+
 }

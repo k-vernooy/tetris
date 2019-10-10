@@ -5,7 +5,6 @@
 #include <ncurses.h>
 #include <unistd.h>
 
-
 #include "../include/tetris.hpp"
 
 using namespace std;
@@ -22,22 +21,53 @@ int main(int argc, char ** argv) {
     noecho();
     keypad(stdscr, TRUE);
     nodelay(stdscr, TRUE);
+    curs_set(0);
+
+    init_pair(1,2,0);
+    wattron(stdscr, COLOR_PAIR(2));
 
     Screen screen(screenstr);
     int score = 0;
-    while (true) {
+    int count = 1;
+    int frameRate = 10;
+    bool newShape = true;
 
+    while (true) {
+        if ( newShape ) {
+            Shape shape;
+            // shape.drop();
+            newShape = false;
+        }
+
+        // if ( shape.isDropping && count % frameRate == 0) {
+        //     shape.drop();
+        // }
+
+        if ( count % frameRate == 0 ) {
+            // shape.fall(shapePos);
+            // if ( shape.checkDie() ) {
+                // //shape can no longer move
+                // newShape = true;
+            // };
+        }
+
+        // sleep for a fraction of a frame 
+        // (fraction of a block drop) in order to allow moving during frame
         unsigned int microseconds = 20000;
         usleep(microseconds);
 
         wmove(stdscr,0,0);
         int ch = getch();
 
-        screen.updateScore(score);
+        if ( ch ) {
+
+        }
+        // screen.updateScore(score);
         screen.draw();
-        // mvprintw(0,0,to_string(ch).c_str());
         wrefresh(stdscr);
-        score++;
+
+        // score += 50;
+        count++;
     }
     endwin();
 

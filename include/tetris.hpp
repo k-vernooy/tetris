@@ -6,20 +6,22 @@
 using namespace std;
 
 class Screen {
+
     vector<vector<string> > window; 
     vector<string> shapes = {"1", "2", "3", "4", "5"};
-
+    bool gameover = false;
 
 
     public:
         Screen(string test);
         void draw();
         void updateScore(int score);
+        void gameOver();
 };
 
 class Shape {
     public:
-    Shape();
+    vector<vector<bool> > selected;
     vector<vector<vector<bool> > > shapecoords = {
         {
             // the 'o' block
@@ -72,7 +74,17 @@ class Shape {
         }
     };
 
-    vector<vector<bool> > shape;
+    int shapeHeight;
+
+    int trCoord[2] = { 1, 9 };
+    int shapeRotation;
+    bool dropping;
+
+    void generate();
     void draw();
+    void drop();
+    void fall();
     void rotate();
+    void move(int movetype);
+    void ground(int framerate);
 };

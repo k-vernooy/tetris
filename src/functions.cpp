@@ -138,27 +138,58 @@ void Shape::rotate() {
 }
 
 void Shape::draw() {
-    int currentPos[2] = { trCoord[0] + defaultPos[1], trCoord[1] + defaultPos[0]};
+    if ( isdropping > 0 ) {
+        // need to cut off something;
+        // left = isdropping
+        int draw = shapeHeight - isdropping;
+        vector<vector<bool> > relevant;
 
-	init_pair(2, color, -1);
-    attrset(COLOR_PAIR(2));
-
-    for ( int i = 0; i < shapeHeight; i++  ) {
-        // for each line;
-        vector<bool> line = selected[i];
-        for ( int i = 0; i < 4; i++ ) {
-            // for each el in line;
-            if ( line[i] ) {
-                // need to draw two side by side fullblocks;
-                mvprintw(currentPos[0], currentPos[1], string("██").c_str());
-            }
-            currentPos[1] += 2;
+        for ( int i = isdropping; i <= draw; i++ ) {
+            relevant.push_back(selected[i]);
         }
-        currentPos[0] += 1;
-        currentPos[1] = trCoord[1] + defaultPos[0];
-    }
 
-	init_pair(1, COLOR_WHITE, -1);
+        int currentPos[2] = { trCoord[0] + defaultPos[1] + 1, trCoord[1] + defaultPos[0]};
+
+        init_pair(2, color, -1);
+        attrset(COLOR_PAIR(2));
+
+        for ( int i = 1; i < draw; i++  ) {
+            // for each line;
+            vector<bool> line = relevant[i];
+            for ( int i = 0; i < 4; i++ ) {
+                // for each el in line;
+                if ( line[i] ) {
+                    // need to draw two side by side fullblocks;
+                    mvprintw(currentPos[0], currentPos[1], string("██").c_str());
+                }
+                currentPos[1] += 2;
+            }
+            currentPos[0] += 1;
+            currentPos[1] = trCoord[1] + defaultPos[0];
+        }
+    }
+    else {
+        int currentPos[2] = { trCoord[0] + defaultPos[1], trCoord[1] + defaultPos[0]};
+
+        init_pair(2, color, -1);
+        attrset(COLOR_PAIR(2));
+
+        for ( int i = 0; i < shapeHeight; i++  ) {
+            // for each line;
+            vector<bool> line = selected[i];
+            for ( int i = 0; i < 4; i++ ) {
+                // for each el in line;
+                if ( line[i] ) {
+                    // need to draw two side by side fullblocks;
+                    mvprintw(currentPos[0], currentPos[1], string("██").c_str());
+                }
+                currentPos[1] += 2;
+            }
+            currentPos[0] += 1;
+            currentPos[1] = trCoord[1] + defaultPos[0];
+        }
+    }
+    init_pair(1, COLOR_WHITE, -1);
     attrset(COLOR_PAIR(1));
 }
 

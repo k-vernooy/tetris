@@ -2,7 +2,7 @@
 #include <fstream>
 #include <ncurses.h>
 #include <cstring>
-#include <cstdlib>
+#include <random>
 
 using namespace std;
 
@@ -66,10 +66,22 @@ void Screen::gameOver() {
     gameover = true;
     // window[9][12] = "die";
 }
-// basically a constructor
+
+
+// basically a constructor to generate a new
+// random shape and fill attributes:
 void Shape::generate() {
-    vector<vector<bool> > selected = shapecoords[(rand() % shapecoords.size()) + 1];
+
+    random_device rd; 
+    mt19937 eng(rd()); 
+    uniform_int_distribution<> distr(1, 7);
+
+    int rand = distr(eng) - 1; 
+    selected = shapecoords[rand];
         
+
+    // find the height of the shape
+
     for ( int row = 0; row < selected.size(); row++ ) {
         bool found = false;
         for ( int cell = 0; cell < selected[row].size(); cell++ ) {
@@ -83,23 +95,65 @@ void Shape::generate() {
     }
 }
 
+string Screen::getChar(int x, int y) {
+    x += defaultPos[0];
+    y += defaultPos[1];
+
+    return window[x][y];
+}
+
 void Shape::drop() {
     bool cannotDrop;
 
+    // if any one of the shape's coordinates cannot move down the full amount, die:
+    for ( int i = 3; i > 0; i-- ) {
+        for ( int x = 0; x < 4; x++ ) {
+            // going up rows of shape, over cells
+            if ( selected[i][x] ) {
+                // this block needs to descend
+                int position[2] = { trCoord[0] + i - 1, trCoord[1] + x };
+            }
+        }
+    }
+    
     if ( cannotDrop ) {
         // gameOver();
     }
 }
 
 void Shape::rotate() {
-
+    // function to rotate the matrix
 }
 
 void Shape::draw() {
 
+    int currentPos[2] = { trCoord[0], trCoord[1] };
+
+    for ( int i = 0; i < shapeHeight; i++  ) {
+        vector<bool> line = selected[i];
+        for ( int i = 0; i < line.size(); i++ ) {
+            if ( line[i] ) {
+                // need to draw two side by side fullblocks;
+                mvprintw(currentPos[0] + defaultPos[0], currentPos[1] + defaultPos[1], string("█").c_str());
+            }
+            else {
+                currentPos[1] += 2;
+            }
+        } 
+        currentPos[0] += 1;
+    }
+
 }
 
 void Shape::fall() {
+
+    // psuedocode:
+
+    //  trCoord--;   // just move down the shape, no need to draw here
+    // if !( spaceBelowAfterMoveDown ) {
+    //  //cannot move down any more, incorporate this one into the board
+    //  screen.drawshape(selected, trcoord[0], trcoord[1]);
+    //}
 
 }
 

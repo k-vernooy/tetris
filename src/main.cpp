@@ -107,6 +107,7 @@ int main(int argc, char ** argv) {
         // and refresh the terminal
         wmove(stdscr,0,0);
         screen.draw();
+        shape.draw();
         wmove(stdscr,restingCursor[0],restingCursor[1]);
         // printw(to_string(shape.shapeHeight).c_str());
         wrefresh(stdscr);

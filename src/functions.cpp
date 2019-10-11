@@ -126,21 +126,21 @@ void Shape::rotate() {
 }
 
 void Shape::draw() {
-
-    int currentPos[2] = { trCoord[0], trCoord[1] };
+    int currentPos[2] = { trCoord[0] + defaultPos[1], trCoord[1] + defaultPos[0]};
 
     for ( int i = 0; i < shapeHeight; i++  ) {
+        // for each line;
         vector<bool> line = selected[i];
-        for ( int i = 0; i < line.size(); i++ ) {
+        for ( int i = 0; i < 4; i++ ) {
+            // for each el in line;
             if ( line[i] ) {
                 // need to draw two side by side fullblocks;
-                mvprintw(currentPos[0] + defaultPos[0], currentPos[1] + defaultPos[1], string("█").c_str());
+                mvprintw(currentPos[0], currentPos[1], string("██").c_str());
             }
-            else {
-                currentPos[1] += 2;
-            }
-        } 
+            currentPos[1] += 2;
+        }
         currentPos[0] += 1;
+        currentPos[1] = trCoord[1] + defaultPos[0];
     }
 
 }

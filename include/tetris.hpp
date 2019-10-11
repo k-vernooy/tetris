@@ -22,7 +22,7 @@ class Screen {
 
 class Shape {
     public:
-    int defaultPos[2] = {4,4};
+    int defaultPos[2] = {2,4};
     vector<vector<bool> > selected;
     vector<vector<vector<bool> > > shapecoords = {
         {

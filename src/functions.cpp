@@ -78,7 +78,7 @@ void Shape::generate() {
 
     int rand = distr(eng) - 1; 
     selected = shapecoords[rand];
-        
+    color = colors[rand];        
 
     // find the height of the shape
 
@@ -93,6 +93,10 @@ void Shape::generate() {
             shapeHeight++;
         }
     }
+
+    // can prob add something here to center shape; ie shapeWidth;
+    defaultPos[1] -= shapeHeight;
+    isdropping = shapeHeight;
 }
 
 string Screen::getChar(int x, int y) {
@@ -103,22 +107,30 @@ string Screen::getChar(int x, int y) {
 }
 
 void Shape::drop() {
-    bool cannotDrop;
+    // bool cannotDrop;
 
-    // if any one of the shape's coordinates cannot move down the full amount, die:
-    for ( int i = 3; i > 0; i-- ) {
-        for ( int x = 0; x < 4; x++ ) {
-            // going up rows of shape, over cells
-            if ( selected[i][x] ) {
-                // this block needs to descend
-                int position[2] = { trCoord[0] + i - 1, trCoord[1] + x };
-            }
-        }
-    }
+    // // if any one of the shape's coordinates cannot move down the full amount, die:
+    // for ( int i = 3; i > 0; i-- ) {
+    //     for ( int x = 0; x < 4; x++ ) {
+    //         // going up rows of shape, over cells
+    //         if ( selected[i][x] ) {
+    //             // this block needs to descend by 1; check coord below;
+    //             int position[2] = { trCoord[0] + i - 1, trCoord[1] + x };
+    //         }
+    //     }
+    // }
     
-    if ( cannotDrop ) {
-        // gameOver();
-    }
+    // if ( cannotDrop ) {
+    //     // gameOver();
+    // }
+    // else {
+    //     trCoord[0] += 1;
+    // }
+
+    trCoord[0]++;
+
+    isdropping--;
+    mvprintw(0,0,to_string(isdropping).c_str());
 }
 
 void Shape::rotate() {
@@ -127,6 +139,9 @@ void Shape::rotate() {
 
 void Shape::draw() {
     int currentPos[2] = { trCoord[0] + defaultPos[1], trCoord[1] + defaultPos[0]};
+
+	init_pair(2, color, -1);
+    attrset(COLOR_PAIR(2));
 
     for ( int i = 0; i < shapeHeight; i++  ) {
         // for each line;
@@ -143,13 +158,15 @@ void Shape::draw() {
         currentPos[1] = trCoord[1] + defaultPos[0];
     }
 
+	init_pair(1, COLOR_WHITE, -1);
+    attrset(COLOR_PAIR(1));
 }
 
 void Shape::fall() {
 
     // psuedocode:
 
-    //  trCoord--;   // just move down the shape, no need to draw here
+     trCoord[0]++;   // just move down the shape, no need to draw here
     // if !( spaceBelowAfterMoveDown ) {
     //  //cannot move down any more, incorporate this one into the board
     //  screen.drawshape(selected, trcoord[0], trcoord[1]);

@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
-
+#include <ncurses.h>
 using namespace std;
 
 class Screen {
@@ -78,10 +78,15 @@ class Shape {
 
     unsigned int shapeHeight;
 
+    bool dead = false;
+    
     int trCoord[2] = { 0, 8 };
     int shapeRotation = 1;
     int isdropping;
     
+    vector<int> colors = { COLOR_YELLOW, COLOR_CYAN, COLOR_BLUE, COLOR_WHITE, COLOR_RED, COLOR_GREEN, COLOR_MAGENTA };
+    int color;
+
     bool cannotMove;
 
     void generate();

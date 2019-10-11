@@ -27,7 +27,7 @@ int main(int argc, char ** argv) {
     curs_set(0);
 	start_color();
     use_default_colors();
-	init_pair(1, COLOR_CYAN, -1);
+	init_pair(1, COLOR_MAGENTA, -1);
     attrset(COLOR_PAIR(1));
 
     // Initialize screen and global vars
@@ -45,7 +45,7 @@ int main(int argc, char ** argv) {
 
     while (true) {
 
-        if ( newShape ) {
+        if ( newShape && count % frameRate == 0) {
             // if we need to generate a new shape, do so;
             // begin dropping the new shape, so
             // we no longer need a new shape.
@@ -54,7 +54,7 @@ int main(int argc, char ** argv) {
             newShape = false;
         }
 
-        if ( shape.isdropping != 0 && count % frameRate == 0) {
+        if ( shape.isdropping > 0 && count % frameRate == 0) {
             // if the shape is high enough that we need to 
             // keep dropping it, do so without worrying about user input
             shape.drop();

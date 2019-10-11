@@ -34,7 +34,7 @@ int main(int argc, char ** argv) {
     Screen screen(screenstr);
     int score = 0;
     int count = 1;
-    int frameRate = 10;
+    int frameRate = 2;
     bool newShape = true;
 
     // in case the terminal doesnt support invis cursor
@@ -53,12 +53,12 @@ int main(int argc, char ** argv) {
             shape.drop();
             newShape = false;
         }
-
-        if ( shape.isdropping > 0 && count % frameRate == 0) {
+        else if ( shape.isdropping > 0 && count % frameRate == 0) {
             // if the shape is high enough that we need to 
             // keep dropping it, do so without worrying about user input
             shape.drop();
         }
+
         else if ( count % frameRate == 0 ) {
             // otherwise, make the shape fall down 1; check for death
             shape.fall();

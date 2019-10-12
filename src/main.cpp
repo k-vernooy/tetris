@@ -12,11 +12,12 @@ using namespace std;
 
 int main(int argc, char ** argv) {
 
-    ifstream t("screen.txt");
-    stringstream buffer;
-    buffer << t.rdbuf();
-    string screenstr = buffer.str();
+    // ifstream t("screen.txt");
+    // stringstream buffer;
+    // buffer << t.rdbuf();
+    // string screenstr = buffer.str();
 
+    string screenstr = " ___ ____ ___ ____ _ ____ \n  |  |___  |  |__/ | [__  \n  |  |___  |  |  \\ | ___] \n  ╭────────────────────╮      \n  │                    │   ╭─────────╮     \n  │                    │   │  Next:  │\n  │                    │   │         │\n  │                    │   │         │\n  │                    │   │         │\n  │                    │   ╰─────────╯   \n  │                    │   \n  │                    │   ╭─────────╮\n  │                    │   │  Score: │\n  │                    │   │   251   │\n  │                    │   │         │   \n  │                    │   ╰─────────╯\n  │                    │   \n  │                    │   ╭─────────╮   \n  │                    │   │  Line:  │    \n  │                    │   │   21    │   \n  │                    │   │         │   \n  │                    │   ╰─────────╯\n  ╰────────────────────╯ \n    k-vernooy/tetris\n";
 
     // Curses setup: window, color, keyinput
     setlocale(LC_CTYPE, "");
@@ -34,7 +35,7 @@ int main(int argc, char ** argv) {
     Screen screen(screenstr);
     int score = 0;
     int count = 1;
-    int frameRate = 2;
+    int frameRate = 6;
     bool newShape = true;
 
     // in case the terminal doesnt support invis cursor
@@ -44,30 +45,42 @@ int main(int argc, char ** argv) {
     Shape shape;
 
     while (true) {
-
+        if ( shape.dead ) {
+            newShape = true;
+        }
         if ( newShape && count % frameRate == 0) {
             // if we need to generate a new shape, do so;
             // begin dropping the new shape, so
             // we no longer need a new shape.
-            shape.generate();
+            shape.generate(screen.getScr());
             shape.drop();
             newShape = false;
         }
-        else if ( shape.isdropping > 0 && count % frameRate == 0) {
-            // if the shape is high enough that we need to 
-            // keep dropping it, do so without worrying about user input
-            shape.drop();
-        }
+        else if ( count % frameRate == 0) {
+            // speed up:
+            // if ( frameRate > 2 ) {
+            //     frameRate--;
+            // }
+            // else {
+            //     frameRate = 1;
+            // }
 
-        else if ( count % frameRate == 0 ) {
-            // otherwise, make the shape fall down 1; check for death
-            shape.fall();
+            // if the shape is still dropping
+            if (shape.isdropping > 0) {
+                // if the shape is high enough that we need to 
+                // keep dropping it, do so without worrying about user input
+                shape.drop();
+            }
+            else {
+                // otherwise, make the shape fall down 1; check for death
+                shape.fall();
 
-            if ( shape.cannotMove ) {
-                //shape can no longer move, so we need to 
-                // generate another shape next iteration of the loop
-                newShape = true;
-            };
+                if ( shape.cannotMove ) {
+                    //shape can no longer move, so we need to 
+                    // generate another shape next iteration of the loop
+                    newShape = true;
+                }
+            }
         }
 
         // sleep for a (fraction of a block drop) 
@@ -109,7 +122,10 @@ int main(int argc, char ** argv) {
         screen.draw();
         shape.draw();
         wmove(stdscr,restingCursor[0],restingCursor[1]);
-        // printw(to_string(shape.shapeHeight).c_str());
+
+        printw(string(shape.cs).c_str());
+        std::cout << boolalpha << shape.dead;
+        // printw(to_string(shape.dead))
         wrefresh(stdscr);
 
         // increment the fraction of a block drop count

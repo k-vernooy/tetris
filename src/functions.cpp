@@ -76,8 +76,10 @@ void Screen::gameOver() {
 // basically a constructor to generate a new
 // random shape and fill attributes:
 void Shape::generate(vector<vector<string> > window) {
-
+    dead = false;
     currentWin = window;
+    trCoord[0] = 0;
+    trCoord[1] = 9;
 
     random_device rd; 
     mt19937 eng(rd()); 
@@ -89,10 +91,10 @@ void Shape::generate(vector<vector<string> > window) {
 
     // find the height of the shape
 
-    for ( int row = 0; row < selected.size(); row++ ) {
+    for ( int i = 0; i < selected.size(); i++ ) {
         bool found = false;
-        for ( int cell = 0; cell < selected[row].size(); cell++ ) {
-            if (selected[row][cell] == 1) {
+        for ( int j = 0; j < selected[i].size(); j++ ) {
+            if (selected[j][i]) {
                 found = true;
             }
         }
@@ -101,9 +103,14 @@ void Shape::generate(vector<vector<string> > window) {
         }
     }
 
+    defaultPos[0] = 4;
+    defaultPos[1] = 4;
+
     // can prob add something here to center shape; ie shapeWidth;
     defaultPos[1] -= shapeHeight;
     isdropping = shapeHeight;
+
+
 }
 
 string Screen::getChar(int x, int y) {
@@ -133,13 +140,13 @@ vector<int> Shape::charCoords(vector<vector<bool> > shape, int pos[2]) {
 
 void Shape::drop() {
     bool cannotDrop = false;
-    vector<int> coords = charCoords(selected, trCoord);
-    for ( int i = 0; i < coords.size(); i = i + 2) {
-        string check = currentWin[coords[i + 1]][coords[i + 1]];
-        if ( check == "█" || check == "─" ) {
-            cannotDrop = true;
-        };
-    }
+    // vector<int> coords = charCoords(selected, trCoord);
+    // for ( int i = 0; i < coords.size(); i = i + 2) {
+    //     string check = currentWin[coords[i]][coords[i + 1]];
+    //     if ( check == "█" || check == "─" ) {
+    //         cannotDrop = true;
+    //     };
+    // }
 
     if ( cannotDrop ) {
         // gameOver();
@@ -149,7 +156,6 @@ void Shape::drop() {
         isdropping--;
         mvprintw(0,0,to_string(isdropping).c_str());
     }
-
 
 }
 
@@ -256,6 +262,10 @@ void Shape::fall() {
     vector<int> coords = charCoords(selected, trCoord);
     cs = ""; 
     for ( int i = 0; i < coords.size(); i = i + 2) {
+        cs += to_string(coords[i]);
+        cs += ",";
+        cs += to_string(coords[i + 1]);
+        cs += " ";
         string check = currentWin[coords[i]][coords[i + 1]];
         if ( check != " " ) {
             cannotFall = true;

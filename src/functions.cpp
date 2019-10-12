@@ -4,6 +4,7 @@
 #include <cstring>
 #include <random>
 #include <algorithm>
+#include <unistd.h>
 
 using namespace std;
 
@@ -140,8 +141,8 @@ void Shape::generate(vector<vector<string> > window) {
     defaultPos[1] = 4;
 
     // can prob add something here to center shape; ie shapeWidth;
-    defaultPos[1] -= shapeHeight;
-    isdropping = shapeHeight;
+    defaultPos[1] -= shapeHeight + 1;
+    isdropping = shapeHeight + 1;
 
 }
 
@@ -170,23 +171,30 @@ vector<int> Shape::charCoords(vector<vector<bool> > shape) {
     return coords;
 }
 
+void gameOver() {
+    int microseconds = 70000;
+    usleep(microseconds);
+    endwin();
+
+}
+
 void Shape::drop() {
     bool cannotDrop = false;
-    // vector<int> coords = charCoords(selected, trCoord);
-    // for ( int i = 0; i < coords.size(); i = i + 2) {
-    //     string check = currentWin[coords[i]][coords[i + 1]];
-    //     if ( check == "█" || check == "─" ) {
-    //         cannotDrop = true;
-    //     };
-    // }
+    vector<int> coords = charCoords(selected);
+
+    for ( int i = 0; i < coords.size(); i = i + 2) {
+        string check = currentWin[coords[i]][coords[i + 1]];
+        if ( check == "█" ) {
+            cannotDrop = true;
+        }
+    }
 
     if ( cannotDrop ) {
-        // gameOver();
+        gameOver();
     }
     else {
         trCoord[0]++;
         isdropping--;
-        mvprintw(0,0,to_string(isdropping).c_str());
     }
 
 }
@@ -201,21 +209,21 @@ void Shape::rotate() {
         for (int y = x; y < 4 - x - 1; y++) { 
             // store current cell in temp variable 
             int temp = selected[x][y]; 
-  
-            // move values from right to top 
             selected[x][y] = selected[y][4-1-x]; 
-  
-            // move values from bottom to right 
             selected[y][4-1-x] = selected[4-1-x][4-1-y]; 
-  
-            // move values from left to bottom 
             selected[4-1-x][4-1-y] = selected[4-1-y][x]; 
-  
-            // assign temp to left 
             selected[4-1-y][x] = temp; 
-        } 
-    } 
+        }
+    }
 
+
+    // add a check here for if the rotate cannot be done
+    // if ( rotate cannot be done ) {
+        // do nothing
+    //}
+    // else {
+        //change shape height
+    //} 
     shapeHeight = 0;
     for ( int row = 0; row < selected.size(); row++ ) {
         bool found = false;
@@ -322,20 +330,45 @@ void Shape::move(int movetype) {
     int currentPos[2] = { trCoord[0] + defaultPos[1], trCoord[1] + defaultPos[0]};
 
     vector<int> coords = charCoords(selected);
+    
+    bool move = true;
 
     if ( movetype == 1 ) {
         // move left
-        trCoord[1] -= 2;
+        for ( int i = 0; i < coords.size(); i += 2 ) {
+            // check the box left of coords[i], coords[i + 1]
+            if ( currentWin[coords[i]][coords[i + 1]] != " " ) {
+                move = false;
+            }
+        }
 
+        if ( move ) {
+            trCoord[1] -= 2;
+        }
     }
     else if ( movetype == 2 ) {
-        // move right
-        trCoord[1] += 2;
+        // move rigjt
+        for ( int i = 0; i < coords.size(); i += 2 ) {
+            if ( currentWin[coords[i]][coords[i + 1] + 4] != " " ) {
+                move = false;
+            }
+        }
+
+        if ( move ) {
+            trCoord[1] += 2;
+        }
     }
     else if ( movetype == 3) {
         // move down
-        
-        trCoord[0] += 1;
+        for ( int i = 0; i < coords.size(); i += 2 ) {
+            if ( currentWin[coords[i]][coords[i + 1]] != " " ) {
+                move = false;
+            }
+        }
+
+        if ( move ) {
+            trCoord[0] += 1;
+        } 
 
     }
 }

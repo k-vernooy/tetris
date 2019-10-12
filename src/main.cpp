@@ -47,6 +47,7 @@ int main(int argc, char ** argv) {
     while (true) {
         if ( shape.dead ) {
             newShape = true;
+            // screen.addShape(shape);
         }
         if ( newShape && count % frameRate == 0) {
             // if we need to generate a new shape, do so;
@@ -124,9 +125,8 @@ int main(int argc, char ** argv) {
         wmove(stdscr,restingCursor[0],restingCursor[1]);
 
         printw(string(shape.cs).c_str());
-        std::cout << boolalpha << shape.dead;
         // printw(to_string(shape.dead))
-        wrefresh(stdscr);
+        // wrefresh(stdscr);
 
         // increment the fraction of a block drop count
         count++;

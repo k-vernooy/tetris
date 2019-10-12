@@ -449,7 +449,7 @@ void Shape::ground(int framerate) {
     while (moveDown) {
         vector<int> coords = charCoords(selected);
         for ( int i = 0; i < coords.size(); i += 2) {
-            if ( currentWin[coords[i] + 1][coords[i + 1]] != " " ) {
+            if ( currentWin[coords[i] + 1][coords[i + 1] + 2] != " " ) {
                 moveDown = false;
             }
         }

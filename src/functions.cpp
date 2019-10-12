@@ -72,6 +72,16 @@ void Screen::gameOver() {
     // window[9][12] = "die";
 }
 
+void Screen::addShape(Shape shape) {
+    int pos[2] = { shape.trCoord[0] + shape.defaultPos[0], shape.trCoord[1] + shape.defaultPos[1] };
+
+    vector<int> coords = shape.charCoords(shape.selected, pos);
+
+    for ( int i = 0; i <= coords.size(); i += 2) {
+        window[coords[i]][coords[i + 1]] = string("o").c_str();
+        window[coords[i]][coords[i + 1] + 1] = string("o").c_str();
+    }
+}
 
 // basically a constructor to generate a new
 // random shape and fill attributes:
@@ -88,23 +98,29 @@ void Shape::generate(vector<vector<string> > window) {
     int rand = distr(eng) - 1; 
     selected = shapecoords[rand];
     color = colors[rand];        
-
+    cs = to_string(rand);
     // selected = shapecoords[1];
     // color = colors[1];
     // find the height of the shape
-    shapeHeight = 1;
-    for ( int i = 0; i < selected.size(); i++ ) {
+    cs += ", ";
+    shapeHeight = 0;
+
+    for ( int i = 0; i < 4; i++ ) {
+        vector<bool> line = selected[i];
         bool found = false;
-        for ( int j = 0; j < selected[i].size(); j++ ) {
-            if (selected[j][i]) {
+
+        for ( int x = 0; x < line.size(); x++ ) {
+            if ( line[x] ) {
                 found = true;
             }
         }
+
         if ( found ) {
             shapeHeight++;
         }
     }
 
+    cs += to_string(shapeHeight);
     defaultPos[0] = 2;
     defaultPos[1] = 4;
 
@@ -261,12 +277,7 @@ void Shape::fall() {
 
     bool cannotFall = false;
     vector<int> coords = charCoords(selected, trCoord);
-    cs = ""; 
     for ( int i = 0; i < coords.size(); i = i + 2) {
-        cs += to_string(coords[i]);
-        cs += ",";
-        cs += to_string(coords[i + 1]);
-        cs += " ";
         string check = currentWin[coords[i]][coords[i + 1]];
         if ( check != " " && check != "│" ) {
             cannotFall = true;

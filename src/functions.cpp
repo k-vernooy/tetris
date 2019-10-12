@@ -73,14 +73,29 @@ void Screen::gameOver() {
 }
 
 void Screen::addShape(Shape shape) {
-    int pos[2] = { shape.trCoord[0] + shape.defaultPos[0], shape.trCoord[1] + shape.defaultPos[1] };
 
-    vector<int> coords = shape.charCoords(shape.selected, pos);
-
-    for ( int i = 0; i <= coords.size(); i += 2) {
-        window[coords[i]][coords[i + 1]] = string("o").c_str();
-        window[coords[i]][coords[i + 1] + 1] = string("o").c_str();
+    for ( int i = 0; i < shape.selected.size(); i++ ) {
+        for ( int x = 0; x < shape.selected[i].size(); x++ ) {
+            if ( shape.selected[i][x] ) {
+                window[i + shape.trCoord[0] + shape.defaultPos[1]][(2 * x - 1) + shape.trCoord[1] + shape.defaultPos[0] + 3] = "█";
+                window[i + shape.trCoord[0] + shape.defaultPos[1]][(2 * x) + shape.trCoord[1] + shape.defaultPos[0] + 3] = "█";
+            }
+            else {
+                // window[i + shape.trCoord[0] + shape.defaultPos[1]][x + shape.trCoord[1] + shape.defaultPos[0]] = "o";
+            }
+        }
     }
+    // shape.trCoord[0] -= 1;
+    // vector<int> coords = shape.charCoords(shape.selected);
+
+    // for ( int i = 0; i <= coords.size(); i += 2) {
+    //     // if ( coords[i] == 21) {
+    //         window[21][coords[i + 1]] = string("o").c_str();
+    //     // } 
+
+    //     // window[21][5] = string("o").c_str();
+    //     // window[coords[i]][coords[i + 1]] = string("o").c_str();
+    // }
 }
 
 // basically a constructor to generate a new
@@ -137,15 +152,15 @@ string Screen::getChar(int x, int y) {
     return window[x][y];
 }
 
-vector<int> Shape::charCoords(vector<vector<bool> > shape, int pos[2]) {
+vector<int> Shape::charCoords(vector<vector<bool> > shape) {
     vector<int> coords;
     int currentPos[2] = { trCoord[0] + defaultPos[1] + 1, trCoord[1] + defaultPos[0]};
-    // top right coord is pos[2]
+    // top  coord is pos[2]
     for ( int i = 0; i < shape.size(); i++ ) {
         for ( int j = 0; j < shape[i].size(); j++ ) {
             if ( shape[i][j] ) {
                 
-                int thisPos[2] = { currentPos[0] + i, currentPos[1] + ( 2 * j ) - 1 };
+                int thisPos[2] = { currentPos[0] + i, currentPos[1] + ( 2 * j ) };
                 coords.push_back(thisPos[0]);
                 coords.push_back(thisPos[1]);
                 // add this coord to the array
@@ -276,9 +291,14 @@ void Shape::draw() {
 void Shape::fall() {
 
     bool cannotFall = false;
-    vector<int> coords = charCoords(selected, trCoord);
+    vector<int> coords = charCoords(selected);
+    cs = "";
     for ( int i = 0; i < coords.size(); i = i + 2) {
-        string check = currentWin[coords[i]][coords[i + 1]];
+        cs += to_string(coords[i]);
+        cs += ",";
+        cs += to_string(coords[i + 1]);
+        cs += " ";
+        string check = currentWin[coords[i]][coords[i + 1] + 3];
         if ( check != " " && check != "│" ) {
             cannotFall = true;
         };
@@ -301,7 +321,7 @@ void Shape::fall() {
 void Shape::move(int movetype) {
     int currentPos[2] = { trCoord[0] + defaultPos[1], trCoord[1] + defaultPos[0]};
 
-    vector<int> coords = charCoords(selected, currentPos);
+    vector<int> coords = charCoords(selected);
 
     if ( movetype == 1 ) {
         // move left

@@ -44,9 +44,51 @@ vector<vector<string> > Screen::getScr() {
 }
 
 void Screen::draw() {
+    vector<int> colors = { COLOR_YELLOW, COLOR_CYAN, COLOR_BLUE, COLOR_WHITE, COLOR_RED, COLOR_GREEN, COLOR_MAGENTA };
+
     for ( int i = 0; i < window.size(); i++ ) {
         for ( int j = 0; j < window[i].size(); j++) {
-            printw(window[i][j].c_str());
+            string cur = window[i][j];
+
+            if ( ( i >= 4 && i < 22 ) && ( j > 4 && j < 25)) {
+                // cur will be num between 1 and 14;
+                if ( cur != " ") {
+
+                    int colorNum;
+                    string printChar;
+
+                    if (stoi(cur) % 2 == 0) {
+                        colorNum = stoi(cur) / 2 - 1;
+                        printChar = "▋";
+                    }
+                    else {
+                        colorNum = floor(stoi(cur) / 2);
+                        printChar = "█";
+                    }
+
+                    int color = colors[colorNum];
+
+                    init_pair(colorNum + 3, color, -1);
+                    attrset(COLOR_PAIR(colorNum + 3));
+
+                    printw(printChar.c_str());
+
+                    init_pair(1, COLOR_WHITE, -1);
+                    attrset(COLOR_PAIR(1));
+
+                    // init_pair(3, COLOR_MAGENTA, -1);
+                    // attrset(COLOR_PAIR(3));
+                    // printw(string("█").c_str());
+                    // init_pair(1, COLOR_WHITE, -1);
+                    // attrset(COLOR_PAIR(1));
+                }
+                else {
+                    printw(string(" ").c_str());
+                }
+            }
+            else {
+                printw(window[i][j].c_str());
+            }
         }
         printw(string("\n").c_str());
     }
@@ -68,18 +110,13 @@ void Screen::updateScore(int score) {
 }
 
 
-void Screen::gameOver() {
-    gameover = true;
-    // window[9][12] = "die";
-}
-
 void Screen::addShape(Shape shape) {
 
     for ( int i = 0; i < shape.selected.size(); i++ ) {
         for ( int x = 0; x < shape.selected[i].size(); x++ ) {
             if ( shape.selected[i][x] ) {
-                window[i + shape.trCoord[0] + shape.defaultPos[1]][(2 * x - 1) + shape.trCoord[1] + shape.defaultPos[0] + 3] = "█";
-                window[i + shape.trCoord[0] + shape.defaultPos[1]][(2 * x) + shape.trCoord[1] + shape.defaultPos[0] + 3] = "█";
+                window[i + shape.trCoord[0] + shape.defaultPos[1]][(2 * x - 1) + shape.trCoord[1] + shape.defaultPos[0] + 3] = to_string(shape.chosenchars[0]);
+                window[i + shape.trCoord[0] + shape.defaultPos[1]][(2 * x) + shape.trCoord[1] + shape.defaultPos[0] + 3] = to_string(shape.chosenchars[1]);
             }
             else {
                 // window[i + shape.trCoord[0] + shape.defaultPos[1]][x + shape.trCoord[1] + shape.defaultPos[0]] = "o";
@@ -113,12 +150,11 @@ void Shape::generate(vector<vector<string> > window) {
 
     int rand = distr(eng) - 1; 
     selected = shapecoords[rand];
+    chosenchars = chars[rand];
     color = colors[rand];        
-    cs = to_string(rand);
     // selected = shapecoords[1];
     // color = colors[1];
     // find the height of the shape
-    cs += ", ";
     shapeHeight = 0;
 
     for ( int i = 0; i < 4; i++ ) {
@@ -136,7 +172,6 @@ void Shape::generate(vector<vector<string> > window) {
         }
     }
 
-    cs += to_string(shapeHeight);
     defaultPos[0] = 2;
     defaultPos[1] = 4;
 
@@ -151,6 +186,27 @@ string Screen::getChar(int x, int y) {
     y += defaultPos[1];
 
     return window[x][y];
+}
+
+vector<int> Screen::pointCheck() {
+    vector<int> fullLines;
+
+    for ( int i = 4; i < 21; i++ ) {
+        bool full = true;
+        for ( int j = 4; j < 23; j++ ) {
+            if (window[i][j] != "█" && window[i][j] != "▋" ) {
+                full = false;
+                break;
+            }
+        }
+        if ( full ) {
+            fullLines.push_back(i);
+        }
+    }
+}
+
+void Screen::shiftLines(vector<int> lines) {
+
 }
 
 vector<int> Shape::charCoords(vector<vector<bool> > shape) {
@@ -171,26 +227,19 @@ vector<int> Shape::charCoords(vector<vector<bool> > shape) {
     return coords;
 }
 
-void gameOver() {
-    int microseconds = 70000;
-    usleep(microseconds);
-    endwin();
-
-}
-
 void Shape::drop() {
     bool cannotDrop = false;
     vector<int> coords = charCoords(selected);
 
     for ( int i = 0; i < coords.size(); i = i + 2) {
         string check = currentWin[coords[i]][coords[i + 1]];
-        if ( check == "█" ) {
+        if ( check == "█" || check == "▋" ) {
             cannotDrop = true;
         }
     }
 
     if ( cannotDrop ) {
-        gameOver();
+        gameover = true;
     }
     else {
         trCoord[0]++;
@@ -261,7 +310,7 @@ void Shape::draw() {
                 // for each el in line;
                 if ( line[i] ) {
                     // need to draw two side by side fullblocks;
-                    mvprintw(currentPos[0], currentPos[1], string("██").c_str());
+                    mvprintw(currentPos[0], currentPos[1], string("█▋").c_str());
                 }
                 currentPos[1] += 2;
             }
@@ -281,7 +330,7 @@ void Shape::draw() {
                 // for each el in line;
                 if ( line[i] ) {
                     // need to draw two side by side fullblocks;
-                    mvprintw(currentPos[0], currentPos[1], string("██").c_str());
+                    mvprintw(currentPos[0], currentPos[1], string("█▋").c_str());
                 }
                 else {
                     mvprintw(currentPos[0], currentPos[1], string("").c_str());
@@ -300,12 +349,7 @@ void Shape::fall() {
 
     bool cannotFall = false;
     vector<int> coords = charCoords(selected);
-    cs = "";
     for ( int i = 0; i < coords.size(); i = i + 2) {
-        cs += to_string(coords[i]);
-        cs += ",";
-        cs += to_string(coords[i + 1]);
-        cs += " ";
         string check = currentWin[coords[i]][coords[i + 1] + 3];
         if ( check != " " && check != "│" ) {
             cannotFall = true;

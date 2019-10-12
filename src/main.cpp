@@ -35,19 +35,21 @@ int main(int argc, char ** argv) {
     Screen screen(screenstr);
     int score = 0;
     int count = 1;
-    int frameRate = 6;
+    int frameRate = 2;
     bool newShape = true;
-
+    
+    GAME:
     // in case the terminal doesnt support invis cursor
     int restingCursor[2] = { 23, 22 };
 
     // create the shape object
     Shape shape;
 
-    while (true) {
+    while (!shape.gameover) {
+
         if ( shape.dead ) {
             newShape = true;
-            // screen.addShape(shape);
+            screen.addShape(shape);
         }
         if ( newShape && count % frameRate == 0) {
             // if we need to generate a new shape, do so;
@@ -124,14 +126,26 @@ int main(int argc, char ** argv) {
         shape.draw();
         wmove(stdscr,restingCursor[0],restingCursor[1]);
 
-        printw(string(shape.cs).c_str());
-        // printw(to_string(shape.dead))
         // wrefresh(stdscr);
 
         // increment the fraction of a block drop count
         count++;
     }
-    endwin();
 
-    return 0;
+    mvprintw(0,0,string("game over!").c_str());
+    mvprintw(1,0,string("try again? (y/n)").c_str());
+    wrefresh(stdscr);
+
+    char testchar = getch();
+
+    if ( testchar == 'y' ) {
+        goto GAME;
+    }
+    else if ( testchar == 'n' ) {
+        return 0;
+    }
+
+    endwin();
+    
+    // return 0;
 }

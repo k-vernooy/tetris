@@ -62,11 +62,20 @@ class Shape {
         }
     };
 
+    vector<vector<int> > chars = {
+        {1, 2},
+        {3, 4},
+        {5, 6},
+        {7, 8},
+        {9, 10},
+        {11, 12},
+        {13, 14}
+    };
+    vector<int> chosenchars;
+
     vector<vector<string> > currentWin;
 
     int shapeHeight = 0;
-    bool dead = false;
-
     int trCoord[2] = {0,9};
     int shapeRotation = 1;
     int isdropping;
@@ -74,9 +83,12 @@ class Shape {
     vector<int> colors = { COLOR_YELLOW, COLOR_CYAN, COLOR_BLUE, COLOR_WHITE, COLOR_RED, COLOR_GREEN, COLOR_MAGENTA };
     int color;
 
+    bool gameover = false;
+    int shapetype;
     bool cannotMove;
-    string cs;
-    vector<int> charCoords(vector<vector<bool> > shape, int pos[2]);
+    bool dead = false;
+
+    vector<int> charCoords(vector<vector<bool> > shape);
     void generate(vector<vector<string> > window);
     void draw();
     void drop();
@@ -101,4 +113,6 @@ class Screen {
         string getChar(int x, int y);
         vector<vector<string> > getScr();
         void addShape(Shape shape);
+        vector<int> pointCheck();
+        void shiftLines(vector<int> lines);
 };

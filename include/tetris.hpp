@@ -18,6 +18,7 @@ class Screen {
         void updateScore(int score);
         void gameOver();
         string getChar(int x, int y);
+        vector<vector<string> > getScr();
 };
 
 class Shape {
@@ -34,8 +35,8 @@ class Shape {
         },
         {
             // the long block
-            {1,1,1,1},
             {0,0,0,0},
+            {1,1,1,1},
             {0,0,0,0},
             {0,0,0,0}
         },
@@ -76,11 +77,12 @@ class Shape {
         }
     };
 
-    unsigned int shapeHeight;
+    vector<vector<string> > currentWin;
 
+    int shapeHeight;
     bool dead = false;
-    
-    int trCoord[2] = { 0, 8 };
+
+    int trCoord[2] = {0,9};
     int shapeRotation = 1;
     int isdropping;
     
@@ -88,8 +90,9 @@ class Shape {
     int color;
 
     bool cannotMove;
-
-    void generate();
+    string cs;
+    vector<int> charCoords(vector<vector<bool> > shape, int pos[2]);
+    void generate(vector<vector<string> > window);
     void draw();
     void drop();
     void fall();

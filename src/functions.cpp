@@ -123,6 +123,12 @@ void Screen::addShape(Shape shape) {
             }
         }
     }
+    vector<int> fullLines = pointCheck();
+    shiftLines(fullLines);
+    // if ( fullLines.size() == 1) {
+    //     window[0][0] = to_string(fullLines[0]);
+    // }
+
     // shape.trCoord[0] -= 1;
     // vector<int> coords = shape.charCoords(shape.selected);
 
@@ -162,7 +168,7 @@ void Shape::generate(vector<vector<string> > window) {
         bool found = false;
 
         for ( int x = 0; x < line.size(); x++ ) {
-            if ( line[x] ) {
+            if ( i == 1 ) {
                 found = true;
             }
         }
@@ -191,21 +197,42 @@ string Screen::getChar(int x, int y) {
 vector<int> Screen::pointCheck() {
     vector<int> fullLines;
 
-    for ( int i = 4; i < 21; i++ ) {
+    for ( int i = 4; i < 22; i++ ) {
         bool full = true;
-        for ( int j = 4; j < 23; j++ ) {
-            if (window[i][j] != "█" && window[i][j] != "▋" ) {
+
+        for ( int k = 5; k < 25; k++ ) {
+            string chosen = window[i][k];
+            // window[i][k] = "1";
+            if ( chosen == " " ) {
                 full = false;
                 break;
             }
         }
+        // for ( int j = 3; j < 22; j++ ) {
+        //     if (window[i][j] == " ") {
+        //         full = false;
+        //         break;
+        //     }
+        // }
         if ( full ) {
             fullLines.push_back(i);
         }
     }
+
+    return fullLines;
 }
 
 void Screen::shiftLines(vector<int> lines) {
+
+    for ( int i = 0; i < lines.size(); i++ ) {
+        for ( int j = lines[i]; j > 3; j--) {
+            for ( int x = 5; x < 25; x++) {
+                if ( j + 1 != 22 ) {
+                    window[j + 1][x] = window[j][x];
+                } 
+            }
+        }
+    }
 
 }
 
@@ -381,7 +408,7 @@ void Shape::move(int movetype) {
         // move left
         for ( int i = 0; i < coords.size(); i += 2 ) {
             // check the box left of coords[i], coords[i + 1]
-            if ( currentWin[coords[i]][coords[i + 1]] != " " ) {
+            if ( currentWin[coords[i] - 1][coords[i + 1]] != " " ) {
                 move = false;
             }
         }
@@ -393,7 +420,7 @@ void Shape::move(int movetype) {
     else if ( movetype == 2 ) {
         // move rigjt
         for ( int i = 0; i < coords.size(); i += 2 ) {
-            if ( currentWin[coords[i]][coords[i + 1] + 4] != " " ) {
+            if ( currentWin[coords[i] - 1][coords[i + 1] + 4] != " " ) {
                 move = false;
             }
         }
@@ -405,7 +432,7 @@ void Shape::move(int movetype) {
     else if ( movetype == 3) {
         // move down
         for ( int i = 0; i < coords.size(); i += 2 ) {
-            if ( currentWin[coords[i]][coords[i + 1]] != " " ) {
+            if ( currentWin[coords[i] + 1][coords[i + 1] + 2] != " " ) {
                 move = false;
             }
         }
@@ -418,5 +445,17 @@ void Shape::move(int movetype) {
 }
 
 void Shape::ground(int framerate) {
-
+    bool moveDown;
+    while (moveDown) {
+        vector<int> coords = charCoords(selected);
+        for ( int i = 0; i < coords.size(); i += 2) {
+            if ( currentWin[coords[i] + 1][coords[i + 1]] != " " ) {
+                moveDown = false;
+            }
+        }
+        
+        if (moveDown) {
+            trCoord[0] += 1;
+        }
+    }
 }

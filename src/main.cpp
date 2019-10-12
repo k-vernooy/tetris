@@ -35,7 +35,7 @@ int main(int argc, char ** argv) {
     Screen screen(screenstr);
     int score = 0;
     int count = 1;
-    int frameRate = 2;
+    int frameRate = 4;
     bool newShape = true;
     
     GAME:

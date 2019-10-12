@@ -89,8 +89,10 @@ void Shape::generate(vector<vector<string> > window) {
     selected = shapecoords[rand];
     color = colors[rand];        
 
+    // selected = shapecoords[1];
+    // color = colors[1];
     // find the height of the shape
-
+    shapeHeight = 1;
     for ( int i = 0; i < selected.size(); i++ ) {
         bool found = false;
         for ( int j = 0; j < selected[i].size(); j++ ) {
@@ -103,13 +105,12 @@ void Shape::generate(vector<vector<string> > window) {
         }
     }
 
-    defaultPos[0] = 4;
+    defaultPos[0] = 2;
     defaultPos[1] = 4;
 
     // can prob add something here to center shape; ie shapeWidth;
     defaultPos[1] -= shapeHeight;
     isdropping = shapeHeight;
-
 
 }
 
@@ -267,7 +268,7 @@ void Shape::fall() {
         cs += to_string(coords[i + 1]);
         cs += " ";
         string check = currentWin[coords[i]][coords[i + 1]];
-        if ( check != " " ) {
+        if ( check != " " && check != "│" ) {
             cannotFall = true;
         };
     }
@@ -287,6 +288,10 @@ void Shape::fall() {
 }
 
 void Shape::move(int movetype) {
+    int currentPos[2] = { trCoord[0] + defaultPos[1], trCoord[1] + defaultPos[0]};
+
+    vector<int> coords = charCoords(selected, currentPos);
+
     if ( movetype == 1 ) {
         // move left
         trCoord[1] -= 2;
@@ -298,7 +303,9 @@ void Shape::move(int movetype) {
     }
     else if ( movetype == 3) {
         // move down
+        
         trCoord[0] += 1;
+
     }
 }
 

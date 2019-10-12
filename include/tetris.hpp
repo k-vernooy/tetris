@@ -26,13 +26,13 @@ class Shape {
     int defaultPos[2] = {2,4};
     vector<vector<bool> > selected;
     vector<vector<vector<bool> > > shapecoords = {
-        {
-            // the 'o' block
-            {1,1,0,0},
-            {1,1,0,0},
-            {0,0,0,0},
-            {0,0,0,0}
-        },
+        // {
+        //     // the 'o' block
+        //     {1,1,0,0},
+        //     {1,1,0,0},
+        //     {0,0,0,0},
+        //     {0,0,0,0}
+        // },
         {
             // the long block
             {0,0,0,0},
@@ -47,13 +47,13 @@ class Shape {
             {1,0,0,0},
             {0,0,0,0}
         },
-        {
-            // the j block
-            {1,1,0,0},
-            {0,1,0,0},
-            {0,1,0,0},
-            {0,0,0,0}
-        },
+        // {
+        //     // the j block
+        //     {1,1,0,0},
+        //     {0,1,0,0},
+        //     {0,1,0,0},
+        //     {0,0,0,0}
+        // },
         {
             // the zag block
             {0,1,0,0},
@@ -61,25 +61,25 @@ class Shape {
             {1,0,0,0},
             {0,0,0,0}
         },
-        {
-            // the zig block
-            {1,0,0,0},
-            {1,1,0,0},
-            {0,1,0,0},
-            {0,0,0,0}
-        },
-        {
-            // the t block
-            {0,1,0,0},
-            {1,1,1,0},
-            {0,0,0,0},
-            {0,0,0,0}
-        }
+        // {
+        //     // the zig block
+        //     {1,0,0,0},
+        //     {1,1,0,0},
+        //     {0,1,0,0},
+        //     {0,0,0,0}
+        // },
+        // {
+        //     // the t block
+        //     {0,1,0,0},
+        //     {1,1,1,0},
+        //     {0,0,0,0},
+        //     {0,0,0,0}
+        // }
     };
 
     vector<vector<string> > currentWin;
 
-    int shapeHeight;
+    int shapeHeight = 0;
     bool dead = false;
 
     int trCoord[2] = {0,9};

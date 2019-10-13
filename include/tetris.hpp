@@ -3,8 +3,8 @@
 #include <string>
 #include <sstream>
 #include <ncurses.h>
-using namespace std;
 
+using namespace std;
 
 class Shape {
     public:
@@ -88,19 +88,21 @@ class Shape {
     bool cannotMove;
     bool dead = false;
 
+    string cs;
+
     vector<int> charCoords(vector<vector<bool> > shape);
     void generate(vector<vector<string> > window);
     void draw();
     void drop();
     void fall();
-    void rotate();
+    vector<vector<string> > rotate();
     void move(int movetype);
     void ground(int framerate);
 };
 
 class Screen {
 
-    vector<vector<string> > window; 
+    public: vector<vector<string> > window; 
     vector<string> shapes = {"1", "2", "3", "4", "5"};
     bool gameover = false;
     int defaultPos[2] = {4,4};

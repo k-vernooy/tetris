@@ -1,10 +1,10 @@
-#include "../include/tetris.hpp"
 #include <fstream>
 #include <ncurses.h>
 #include <cstring>
 #include <random>
 #include <algorithm>
 #include <unistd.h>
+#include "../include/tetris.hpp"
 
 using namespace std;
 
@@ -17,6 +17,13 @@ string readLine(string str, int n) {
 
    getline(f,s);
    return s; 
+}
+
+
+bool isNumber(const string& s) {
+    string::const_iterator it = s.begin();
+    while (it != s.end() && isdigit(*it)) ++it;
+    return !s.empty() && it == s.end();
 }
 
 Screen::Screen(string screenstr) {
@@ -164,6 +171,7 @@ void Screen::points() {
     vector<int> points = { 40, 100, 300, 1200};
 
     int point;
+
     if ( fullLines.size() == 0 ) {
         point = 0;
     }
@@ -173,7 +181,7 @@ void Screen::points() {
 
     score += point;
     updateScore(score);
-    updateScore(lines);
+    updateLines(lines);
     shiftLines(fullLines);
 }
 
@@ -236,19 +244,19 @@ vector<int> Screen::pointCheck() {
         bool full = true;
 
         for ( int k = 5; k < 25; k++ ) {
-            string chosen = window[i][k];
-            // window[i][k] = "1";
-            if ( chosen == " " ) {
-                full = false;
+            const char * chosen = window[i][k].c_str();
+            for ( int i = 0; i < strlen(chosen); i++ ) {
+                if ( !isdigit(chosen[i]) ) {
+                    full = false;
+                }
+                if ( !full ) {
+                    break;
+                }
+            }
+            if ( !full ) {
                 break;
             }
         }
-        // for ( int j = 3; j < 22; j++ ) {
-        //     if (window[i][j] == " ") {
-        //         full = false;
-        //         break;
-        //     }
-        // }
         if ( full ) {
             fullLines.push_back(i);
         }
@@ -315,23 +323,33 @@ void Shape::drop() {
 
 }
 
-void Shape::rotate() {
+vector<vector<string> > Shape::rotate() {
     // function to rotate the matrix
+    vector<vector<bool> > tester = selected;
 
     // Consider all squares one by one 
     for (int x = 0; x < 4 / 2; x++) { 
-        // Consider elements in group of 4 in  
-        // current square 
         for (int y = x; y < 4 - x - 1; y++) { 
-            // store current cell in temp variable 
-            int temp = selected[x][y]; 
-            selected[x][y] = selected[y][4-1-x]; 
-            selected[y][4-1-x] = selected[4-1-x][4-1-y]; 
-            selected[4-1-x][4-1-y] = selected[4-1-y][x]; 
-            selected[4-1-y][x] = temp; 
+            int temp = tester[x][y]; 
+            tester[x][y] = tester[y][4-1-x]; 
+            tester[y][4-1-x] = tester[4-1-x][4-1-y]; 
+            tester[4-1-x][4-1-y] = tester[4-1-y][x]; 
+            tester[4-1-y][x] = temp; 
         }
     }
 
+    vector<int> coords = charCoords(tester);
+    bool rotate = true;
+    for ( int i = 0; i < coords.size(); i += 2 ) {
+        string chosen = currentWin[coords[i] - 1][coords[i + 1] + 2];
+        if ( chosen != " " ) {
+            rotate = false;
+        }
+    }
+
+    if ( rotate ) {
+        selected = tester;
+    }
 
     // add a check here for if the rotate cannot be done
     // if ( rotate cannot be done ) {
@@ -352,6 +370,8 @@ void Shape::rotate() {
             shapeHeight++;
         }
     }
+
+    return currentWin;
 }
 
 void Shape::draw() {

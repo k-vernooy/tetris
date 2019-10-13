@@ -10,40 +10,15 @@
 
 using namespace std;
 
-int main(int argc, char ** argv) {
+void game(Shape shape, Screen screen) {
 
-    // ifstream t("screen.txt");
-    // stringstream buffer;
-    // buffer << t.rdbuf();
-    // string screenstr = buffer.str();
-
-    string screenstr = " ___ ____ ___ ____ _ ____ \n  |  |___  |  |__/ | [__  \n  |  |___  |  |  \\ | ___] \n  ╭────────────────────╮      \n  │                    │   ╭─────────╮     \n  │                    │   │  Next:  │\n  │                    │   │         │\n  │                    │   │         │\n  │                    │   │         │\n  │                    │   ╰─────────╯   \n  │                    │   \n  │                    │   ╭─────────╮\n  │                    │   │  Score: │\n  │                    │   │    0    │\n  │                    │   │         │   \n  │                    │   ╰─────────╯\n  │                    │   \n  │                    │   ╭─────────╮   \n  │                    │   │  Line:  │    \n  │                    │   │   0     │   \n  │                    │   │         │   \n  │                    │   ╰─────────╯\n  ╰────────────────────╯ \n    k-vernooy/tetris\n";
-
-    // Curses setup: window, color, keyinput
-    setlocale(LC_CTYPE, "");
-    initscr();
-    noecho();
-    keypad(stdscr, TRUE);
-    nodelay(stdscr, TRUE);
-    curs_set(0);
-	start_color();
-    use_default_colors();
-	init_pair(1, COLOR_MAGENTA, -1);
-    attrset(COLOR_PAIR(1));
-
-    // Initialize screen and global vars
-    Screen screen(screenstr);
-    int score = 0;
-    int count = 1;
+    // global game vars:
     int frameRate = 20;
     bool newShape = true;
-    
-    GAME:
+    int count = 0;
     // in case the terminal doesnt support invis cursor
     int restingCursor[2] = { 23, 22 };
 
-    // create the shape object
-    Shape shape;
 
     while (!shape.gameover) {
 
@@ -141,15 +116,47 @@ int main(int argc, char ** argv) {
         // increment the fraction of a block drop count
         count++;
     }
+}
+
+int main(int argc, char ** argv) {
+
+    // ifstream t("screen.txt");
+    // stringstream buffer;
+    // buffer << t.rdbuf();
+    // string screenstr = buffer.str();
+
+    string screenstr = " ___ ____ ___ ____ _ ____ \n  |  |___  |  |__/ | [__  \n  |  |___  |  |  \\ | ___] \n  ╭────────────────────╮      \n  │                    │   ╭─────────╮     \n  │                    │   │  Next:  │\n  │                    │   │         │\n  │                    │   │         │\n  │                    │   │         │\n  │                    │   ╰─────────╯   \n  │                    │   \n  │                    │   ╭─────────╮\n  │                    │   │  Score: │\n  │                    │   │    0    │\n  │                    │   │         │   \n  │                    │   ╰─────────╯\n  │                    │   \n  │                    │   ╭─────────╮   \n  │                    │   │  Line:  │    \n  │                    │   │   0     │   \n  │                    │   │         │   \n  │                    │   ╰─────────╯\n  ╰────────────────────╯ \n    k-vernooy/tetris\n";
+
+    // Curses setup: window, color, keyinput
+    setlocale(LC_CTYPE, "");
+    initscr();
+    noecho();
+    keypad(stdscr, TRUE);
+    nodelay(stdscr, TRUE);
+    curs_set(0);
+	start_color();
+    use_default_colors();
+	init_pair(1, COLOR_MAGENTA, -1);
+    attrset(COLOR_PAIR(1));
+
+    // Initialize screen and global vars
+    Screen screen(screenstr);
+
+    // create the shape object
+    Shape shape;
+
+    game(shape, screen);
 
     mvprintw(0,0,string("game over!").c_str());
     mvprintw(1,0,string("try again? (y/n)").c_str());
     wrefresh(stdscr);
 
+    nodelay(stdscr, FALSE);
+
     char testchar = getch();
 
     if ( testchar == 'y' ) {
-        goto GAME;
+        game(shape, screen);
     }
     else if ( testchar == 'n' ) {
         return 0;

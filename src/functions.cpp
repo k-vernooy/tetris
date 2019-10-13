@@ -323,7 +323,7 @@ void Shape::drop() {
 
 }
 
-vector<vector<string> > Shape::rotate() {
+void Shape::rotate() {
     // function to rotate the matrix
     vector<vector<bool> > tester = selected;
 
@@ -370,8 +370,6 @@ vector<vector<string> > Shape::rotate() {
             shapeHeight++;
         }
     }
-
-    return currentWin;
 }
 
 void Shape::draw() {

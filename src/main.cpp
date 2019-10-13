@@ -35,7 +35,7 @@ int main(int argc, char ** argv) {
     Screen screen(screenstr);
     int score = 0;
     int count = 1;
-    int frameRate = 4;
+    int frameRate = 20;
     bool newShape = true;
     
     GAME:
@@ -90,7 +90,7 @@ int main(int argc, char ** argv) {
 
         // sleep for a (fraction of a block drop) 
         // in order to allow moving during frame        
-        int microseconds = 60000;
+        int microseconds = 10000;
         usleep(microseconds);
 
 
@@ -124,10 +124,12 @@ int main(int argc, char ** argv) {
         // move the cursor, print the screen,
         // and refresh the terminal
         wmove(stdscr,0,0);
+
         screen.draw();
         shape.draw();
+        
         wmove(stdscr,restingCursor[0],restingCursor[1]);
-
+        printw(shape.cs.c_str());
         // wrefresh(stdscr);
 
         // increment the fraction of a block drop count

@@ -95,7 +95,7 @@ class Shape {
     void draw();
     void drop();
     void fall();
-    vector<vector<string> > rotate();
+    void rotate();
     void move(int movetype);
     void ground(int framerate);
 };

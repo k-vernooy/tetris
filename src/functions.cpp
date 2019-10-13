@@ -66,8 +66,7 @@ void Screen::draw() {
     for ( int i = 0; i < window.size(); i++ ) {
         for ( int j = 0; j < window[i].size(); j++) {
             string cur = window[i][j];
-
-            if ( ( i >= 4 && i < 22 ) && ( j > 4 && j < 25)) {
+            if ( (( i >= 4 && i < 22 ) && ( j > 4 && j < 25)) || ( ( i >= 6 && i < 9 ) && ( j > 33 && j < 43) )) {
                 // cur will be num between 1 and 14;
                 if ( cur != " ") {
 
@@ -111,7 +110,7 @@ void Screen::draw() {
     }
 }
 
-void Screen::addNext(vector<vector<bool> > shape) {
+void Screen::addNext(vector<vector<bool> > shape, vector<int> color) {
     int x = 34;
     int y = 6;
 
@@ -122,8 +121,8 @@ void Screen::addNext(vector<vector<bool> > shape) {
             // window[y + i][x + 2 * j] = "t";
             // window[y + i][x + 2 * j + 1] = "t";
             if ( line[j] ) {
-                window[y + i][x + ( 2 * j )] = "█";
-                window[y + i][x + ( 2 * j ) + 1] = "▋";
+                window[y + i][x + ( 2 * j )] = to_string(color[0]);
+                window[y + i][x + ( 2 * j ) + 1] = to_string(color[1]);
             }
             else {
                 window[y + i][x + ( 2 * j )] = " ";
@@ -249,6 +248,7 @@ void Shape::generate(vector<vector<string> > window) {
     shapetype[1] = rand;
 
     nextUp = shapecoords[shapetype[1]];
+    nextchars = chars[shapetype[1]];
 
     selected = shapecoords[shapetype[0]];
     chosenchars = chars[shapetype[0]];

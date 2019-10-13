@@ -63,7 +63,7 @@ int main(int argc, char ** argv) {
             // begin dropping the new shape, so
             // we no longer need a new shape.
             shape.generate(screen.getScr());
-            screen.addNext(shape.nextUp);
+            screen.addNext(shape.nextUp, shape.nextchars);
             shape.drop();
             newShape = false;
         }

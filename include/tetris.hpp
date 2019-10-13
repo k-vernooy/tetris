@@ -73,6 +73,7 @@ class Shape {
         {13, 14}
     };
     vector<int> chosenchars;
+    vector<int> nextchars;
 
     vector<vector<string> > currentWin;
     vector<vector<bool> > nextUp;
@@ -124,5 +125,5 @@ class Screen {
         void points();
         void updateLines(int score);
         void top();
-        void addNext(vector<vector<bool> > shape);
+        void addNext(vector<vector<bool> > shape, vector<int> color);
 };

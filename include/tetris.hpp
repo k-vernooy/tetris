@@ -8,6 +8,7 @@ using namespace std;
 
 class Shape {
     public:
+    Shape();
     int defaultPos[2] = {2,4};
     vector<vector<bool> > selected;
     vector<vector<vector<bool> > > shapecoords = {
@@ -74,6 +75,8 @@ class Shape {
     vector<int> chosenchars;
 
     vector<vector<string> > currentWin;
+    vector<vector<bool> > nextUp;
+
 
     int shapeHeight = 0;
     int trCoord[2] = {0,9};
@@ -84,7 +87,7 @@ class Shape {
     int color;
 
     bool gameover = false;
-    int shapetype;
+    int shapetype[2];
     bool cannotMove = false;
     bool dead = false;
 
@@ -120,4 +123,6 @@ class Screen {
         void shiftLines(vector<int> lines);
         void points();
         void updateLines(int score);
+        void top();
+        void addNext(vector<vector<bool> > shape);
 };

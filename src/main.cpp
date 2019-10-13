@@ -52,12 +52,18 @@ int main(int argc, char ** argv) {
             newShape = true;
             screen.addShape(shape);
             screen.points();
+
+            /// TODO HERE:
+            // ADD A CHECK TO SEE IF WE CAN STILL 
+            // MOVE DOWN, MOVING AFTER DEATH - 
+
         }
         if ( newShape ) {
             // if we need to generate a new shape, do so;
             // begin dropping the new shape, so
             // we no longer need a new shape.
             shape.generate(screen.getScr());
+            screen.addNext(shape.nextUp);
             shape.drop();
             newShape = false;
         }
@@ -127,9 +133,9 @@ int main(int argc, char ** argv) {
 
         screen.draw();
         shape.draw();
-        
+        screen.top();
+        // printw(shape.cs.c_str());
         wmove(stdscr,restingCursor[0],restingCursor[1]);
-        printw(shape.cs.c_str());
         // wrefresh(stdscr);
 
         // increment the fraction of a block drop count

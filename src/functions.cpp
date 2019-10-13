@@ -50,6 +50,16 @@ vector<vector<string> > Screen::getScr() {
     return window;
 }
 
+void Screen::top() {
+    move(0,0);
+    for ( int i = 0; i < 4; i++ ) {
+        for ( int j = 0; j < window[i].size(); j++) {
+            printw(window[i][j].c_str());
+        }
+        printw(string("\n").c_str());
+    }
+}
+
 void Screen::draw() {
     vector<int> colors = { COLOR_YELLOW, COLOR_CYAN, COLOR_BLUE, COLOR_WHITE, COLOR_RED, COLOR_GREEN, COLOR_MAGENTA };
 
@@ -98,6 +108,28 @@ void Screen::draw() {
             }
         }
         printw(string("\n").c_str());
+    }
+}
+
+void Screen::addNext(vector<vector<bool> > shape) {
+    int x = 34;
+    int y = 6;
+
+    for ( int i = 0; i < 3; i++ ) {
+
+        vector<bool> line = shape[i];
+        for ( int j = 0; j < line.size(); j++ ) {
+            // window[y + i][x + 2 * j] = "t";
+            // window[y + i][x + 2 * j + 1] = "t";
+            if ( line[j] ) {
+                window[y + i][x + ( 2 * j )] = "█";
+                window[y + i][x + ( 2 * j ) + 1] = "▋";
+            }
+            else {
+                window[y + i][x + ( 2 * j )] = " ";
+                window[y + i][x + ( 2 * j ) + 1] = " ";               
+            }
+        }
     }
 }
 
@@ -187,20 +219,42 @@ void Screen::points() {
 
 // basically a constructor to generate a new
 // random shape and fill attributes:
+
+Shape::Shape() {
+    random_device rd; 
+    mt19937 eng(rd()); 
+    uniform_int_distribution<> distr(1, 7);
+
+    int rand = distr(eng) - 1; 
+
+    shapetype[0] = 0;
+    shapetype[1] = rand;
+}
+
+
 void Shape::generate(vector<vector<string> > window) {
     dead = false;
     currentWin = window;
     trCoord[0] = 0;
     trCoord[1] = 9;
 
+    shapetype[0] = shapetype[1];
+
     random_device rd; 
     mt19937 eng(rd()); 
     uniform_int_distribution<> distr(1, 7);
 
     int rand = distr(eng) - 1; 
-    selected = shapecoords[rand];
-    chosenchars = chars[rand];
-    color = colors[rand];        
+
+    shapetype[1] = rand;
+
+    nextUp = shapecoords[shapetype[1]];
+
+    selected = shapecoords[shapetype[0]];
+    chosenchars = chars[shapetype[0]];
+    color = colors[shapetype[0]];       
+
+     
     // selected = shapecoords[1];
     // color = colors[1];
     // find the height of the shape
@@ -221,12 +275,13 @@ void Shape::generate(vector<vector<string> > window) {
         }
     }
 
-    defaultPos[0] = 2;
+    defaultPos[0] = 0;
     defaultPos[1] = 2;
 
     // can prob add something here to center shape; ie shapeWidth;
-    // defaultPos[1] -= shapeHeight + 1;
-    isdropping = shapeHeight;
+    trCoord[0] -= shapeHeight;
+    trCoord[0] -= 1;
+    isdropping = shapeHeight + 2;
 
 }
 
@@ -373,58 +428,26 @@ void Shape::rotate() {
 }
 
 void Shape::draw() {
-    if ( isdropping > 0 ) {
-        // need to cut off something;
-        // left = isdropping
-        int draw = shapeHeight - isdropping;
-        vector<vector<bool> > relevant;
+    int currentPos[2] = { trCoord[0] + defaultPos[1], trCoord[1] + defaultPos[0]};
 
-        for ( int i = isdropping; i <= draw; i++ ) {
-            relevant.push_back(selected[i]);
-        }
-
-        int currentPos[2] = { trCoord[0] + defaultPos[1] + 1, trCoord[1] + defaultPos[0]};
-
-        init_pair(2, color, -1);
-        attrset(COLOR_PAIR(2));
-
-        for ( int i = 1; i < draw; i++  ) {
-            // for each line;
-            vector<bool> line = relevant[i];
-            for ( int i = 0; i < 4; i++ ) {
-                // for each el in line;
-                if ( line[i] ) {
-                    // need to draw two side by side fullblocks;
-                    mvprintw(currentPos[0], currentPos[1], string("█▋").c_str());
-                }
-                currentPos[1] += 2;
+    init_pair(2, color, -1);
+    attrset(COLOR_PAIR(2));
+    for ( int i = 0; i < selected.size(); i++  ) {
+        // for each line;
+        vector<bool> line = selected[i];
+        for ( int i = 0; i < 4; i++ ) {
+            // for each el in line;
+            if ( line[i] ) {
+                // need to draw two side by side fullblocks;
+                mvprintw(currentPos[0], currentPos[1], string("█▋").c_str());
             }
-            currentPos[0] += 1;
-            currentPos[1] = trCoord[1] + defaultPos[0];
-        }
-    }
-    else {
-        int currentPos[2] = { trCoord[0] + defaultPos[1], trCoord[1] + defaultPos[0]};
-
-        init_pair(2, color, -1);
-        attrset(COLOR_PAIR(2));
-        for ( int i = 0; i < selected.size(); i++  ) {
-            // for each line;
-            vector<bool> line = selected[i];
-            for ( int i = 0; i < 4; i++ ) {
-                // for each el in line;
-                if ( line[i] ) {
-                    // need to draw two side by side fullblocks;
-                    mvprintw(currentPos[0], currentPos[1], string("█▋").c_str());
-                }
-                else {
-                    mvprintw(currentPos[0], currentPos[1], string("").c_str());
-                }
-                currentPos[1] += 2;
+            else {
+                mvprintw(currentPos[0], currentPos[1], string("").c_str());
             }
-            currentPos[0] += 1;
-            currentPos[1] = trCoord[1] + defaultPos[0];
+            currentPos[1] += 2;
         }
+        currentPos[0] += 1;
+        currentPos[1] = trCoord[1] + defaultPos[0];
     }
     init_pair(1, COLOR_WHITE, -1);
     attrset(COLOR_PAIR(1));

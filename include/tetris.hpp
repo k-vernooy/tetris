@@ -85,7 +85,7 @@ class Shape {
 
     bool gameover = false;
     int shapetype;
-    bool cannotMove;
+    bool cannotMove = false;
     bool dead = false;
 
     string cs;

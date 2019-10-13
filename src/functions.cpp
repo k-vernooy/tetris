@@ -109,6 +109,20 @@ void Screen::updateScore(int score) {
     }
 }
 
+void Screen::updateLines(int score) {
+    int x = 19;
+    int y = 36;
+
+    window[x][y] = to_string(score);
+
+    for ( int z = 37; z < 42; z++ ) {
+        window[x][z] = " ";
+    }
+
+    for ( int i = 1; i < to_string(score).length(); i++ ) {
+        window[x][y + i] = "";
+    }
+}
 
 void Screen::addShape(Shape shape) {
 
@@ -123,8 +137,7 @@ void Screen::addShape(Shape shape) {
             }
         }
     }
-    vector<int> fullLines = pointCheck();
-    shiftLines(fullLines);
+
     // if ( fullLines.size() == 1) {
     //     window[0][0] = to_string(fullLines[0]);
     // }
@@ -140,6 +153,28 @@ void Screen::addShape(Shape shape) {
     //     // window[21][5] = string("o").c_str();
     //     // window[coords[i]][coords[i + 1]] = string("o").c_str();
     // }
+}
+
+void Screen::points() {
+    vector<int> fullLines = pointCheck();
+    window[0][0] = to_string(fullLines.size());
+    
+    int linesNew = fullLines.size();
+    lines += linesNew;
+    vector<int> points = { 40, 100, 300, 1200};
+
+    int point;
+    if ( fullLines.size() == 0 ) {
+        point = 0;
+    }
+    else {
+        point = points[fullLines.size() - 1];
+    }
+
+    score += point;
+    updateScore(score);
+    updateScore(lines);
+    shiftLines(fullLines);
 }
 
 // basically a constructor to generate a new
@@ -179,11 +214,11 @@ void Shape::generate(vector<vector<string> > window) {
     }
 
     defaultPos[0] = 2;
-    defaultPos[1] = 4;
+    defaultPos[1] = 2;
 
     // can prob add something here to center shape; ie shapeWidth;
-    defaultPos[1] -= shapeHeight + 1;
-    isdropping = shapeHeight + 1;
+    // defaultPos[1] -= shapeHeight + 1;
+    isdropping = shapeHeight;
 
 }
 
@@ -225,11 +260,16 @@ vector<int> Screen::pointCheck() {
 void Screen::shiftLines(vector<int> lines) {
 
     for ( int i = 0; i < lines.size(); i++ ) {
-        for ( int j = lines[i]; j > 3; j--) {
-            for ( int x = 5; x < 25; x++) {
-                if ( j + 1 != 22 ) {
-                    window[j + 1][x] = window[j][x];
-                } 
+        for ( int x = 5; x < 25; x++) {
+            window[lines[i]][x] = " ";
+        } 
+    }
+
+    for ( int i = 0; i < lines.size(); i++ ) {
+        vector<string> line = window[lines[i]];
+        for ( int j = lines[i] - 1; j > 4; j-- ) {
+            for ( int x = 5; x < 25; x++ ) {
+                window[j + 1][x] = window[j][x];
             }
         }
     }
@@ -255,23 +295,23 @@ vector<int> Shape::charCoords(vector<vector<bool> > shape) {
 }
 
 void Shape::drop() {
-    bool cannotDrop = false;
-    vector<int> coords = charCoords(selected);
+    // bool cannotDrop = false;
+    // vector<int> coords = charCoords(selected);
 
-    for ( int i = 0; i < coords.size(); i = i + 2) {
-        string check = currentWin[coords[i]][coords[i + 1]];
-        if ( check == "█" || check == "▋" ) {
-            cannotDrop = true;
-        }
-    }
+    // for ( int i = 0; i < coords.size(); i = i + 2) {
+    //     string check = currentWin[coords[i]][coords[i + 1]];
+    //     if ( check == "█" || check == "▋" ) {
+    //         cannotDrop = true;
+    //     }
+    // }
 
-    if ( cannotDrop ) {
-        gameover = true;
-    }
-    else {
+    // if ( cannotDrop ) {
+    //     gameover = true;
+    // }
+    // else {
         trCoord[0]++;
         isdropping--;
-    }
+    // }
 
 }
 

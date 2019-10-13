@@ -104,7 +104,8 @@ class Screen {
     vector<string> shapes = {"1", "2", "3", "4", "5"};
     bool gameover = false;
     int defaultPos[2] = {4,4};
-
+    int score = 0;
+    int lines = 0;
     public:
         Screen(string test);
         void draw();
@@ -115,4 +116,6 @@ class Screen {
         void addShape(Shape shape);
         vector<int> pointCheck();
         void shiftLines(vector<int> lines);
+        void points();
+        void updateLines(int score);
 };

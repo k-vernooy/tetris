@@ -358,23 +358,23 @@ vector<int> Shape::charCoords(vector<vector<bool> > shape) {
 }
 
 void Shape::drop() {
-    // bool cannotDrop = false;
-    // vector<int> coords = charCoords(selected);
+    bool cannotDrop = false;
+    vector<int> coords = charCoords(selected);
 
-    // for ( int i = 0; i < coords.size(); i = i + 2) {
-    //     string check = currentWin[coords[i]][coords[i + 1]];
-    //     if ( check == "█" || check == "▋" ) {
-    //         cannotDrop = true;
-    //     }
-    // }
+    for ( int i = 0; i < coords.size(); i = i + 2) {
+        string check = currentWin[coords[i]][coords[i + 1]];
+        if ( check != " " && isNumber(check) ) {
+            cannotDrop = true;
+        }
+    }
 
-    // if ( cannotDrop ) {
-    //     gameover = true;
-    // }
-    // else {
+    if ( cannotDrop ) {
+        gameover = true;
+    }
+    else {
         trCoord[0]++;
         isdropping--;
-    // }
+    }
 
 }
 

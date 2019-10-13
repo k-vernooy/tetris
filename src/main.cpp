@@ -5,7 +5,7 @@
 #include <ncurses.h>
 #include <unistd.h>
 #include <cstdlib>
-
+#include <stdio.h>
 #include "../include/tetris.hpp"
 
 using namespace std;
@@ -17,7 +17,7 @@ int main(int argc, char ** argv) {
     // buffer << t.rdbuf();
     // string screenstr = buffer.str();
 
-    string screenstr = " ___ ____ ___ ____ _ ____ \n  |  |___  |  |__/ | [__  \n  |  |___  |  |  \\ | ___] \n  ╭────────────────────╮      \n  │                    │   ╭─────────╮     \n  │                    │   │  Next:  │\n  │                    │   │         │\n  │                    │   │         │\n  │                    │   │         │\n  │                    │   ╰─────────╯   \n  │                    │   \n  │                    │   ╭─────────╮\n  │                    │   │  Score: │\n  │                    │   │   251   │\n  │                    │   │         │   \n  │                    │   ╰─────────╯\n  │                    │   \n  │                    │   ╭─────────╮   \n  │                    │   │  Line:  │    \n  │                    │   │   21    │   \n  │                    │   │         │   \n  │                    │   ╰─────────╯\n  ╰────────────────────╯ \n    k-vernooy/tetris\n";
+    string screenstr = " ___ ____ ___ ____ _ ____ \n  |  |___  |  |__/ | [__  \n  |  |___  |  |  \\ | ___] \n  ╭────────────────────╮      \n  │                    │   ╭─────────╮     \n  │                    │   │  Next:  │\n  │                    │   │         │\n  │                    │   │         │\n  │                    │   │         │\n  │                    │   ╰─────────╯   \n  │                    │   \n  │                    │   ╭─────────╮\n  │                    │   │  Score: │\n  │                    │   │    0    │\n  │                    │   │         │   \n  │                    │   ╰─────────╯\n  │                    │   \n  │                    │   ╭─────────╮   \n  │                    │   │  Line:  │    \n  │                    │   │   0     │   \n  │                    │   │         │   \n  │                    │   ╰─────────╯\n  ╰────────────────────╯ \n    k-vernooy/tetris\n";
 
     // Curses setup: window, color, keyinput
     setlocale(LC_CTYPE, "");
@@ -48,10 +48,12 @@ int main(int argc, char ** argv) {
     while (!shape.gameover) {
 
         if ( shape.dead ) {
+            beep();
             newShape = true;
             screen.addShape(shape);
+            screen.points();
         }
-        if ( newShape && count % frameRate == 0) {
+        if ( newShape ) {
             // if we need to generate a new shape, do so;
             // begin dropping the new shape, so
             // we no longer need a new shape.
@@ -117,7 +119,7 @@ int main(int argc, char ** argv) {
         }
 
         // draw the score to the screen
-        screen.updateScore(count);
+        // screen.updateScore(count);
 
         // move the cursor, print the screen,
         // and refresh the terminal

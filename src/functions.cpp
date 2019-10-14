@@ -195,8 +195,7 @@ void Screen::addShape(Shape shape) {
 
 void Screen::points() {
     vector<int> fullLines = pointCheck();
-    window[0][0] = to_string(fullLines.size());
-    
+        
     int linesNew = fullLines.size();
     lines += linesNew;
     vector<int> points = { 40, 100, 300, 1200};

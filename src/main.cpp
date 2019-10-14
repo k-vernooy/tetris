@@ -16,6 +16,8 @@ void game(Shape shape, Screen screen) {
     int frameRate = 20;
     bool newShape = true;
     int count = 0;
+    unsigned int microseconds = 10000;
+
     // in case the terminal doesnt support invis cursor
     int restingCursor[2] = { 23, 22 };
 
@@ -40,6 +42,9 @@ void game(Shape shape, Screen screen) {
             shape.generate(screen.getScr());
             screen.addNext(shape.nextUp, shape.nextchars);
             shape.drop();
+            if (shape.gameover) {
+                break;
+            }
             newShape = false;
         }
         else if ( count % frameRate == 0) {
@@ -71,7 +76,6 @@ void game(Shape shape, Screen screen) {
 
         // sleep for a (fraction of a block drop) 
         // in order to allow moving during frame        
-        int microseconds = 10000;
         usleep(microseconds);
 
 
@@ -116,6 +120,43 @@ void game(Shape shape, Screen screen) {
         // increment the fraction of a block drop count
         count++;
     }
+    nodelay(stdscr, FALSE);
+
+    wrefresh(stdscr);
+    for ( int i = 11; i < 15; i++  ) {
+        for ( int j = 3; j < 23; j++ ) {
+            mvprintw(i,j," ");
+        }
+    }
+
+    mvprintw(14, 2, "├");
+    mvprintw(11, 2, "├");
+
+    for ( int i = 3; i < 24; i++ ) {
+        mvprintw(11, i, "─");
+        mvprintw(14, i, "─");
+    }
+
+    mvprintw(14, 23, "┤");
+    mvprintw(11, 23, "┤");
+
+    mvprintw(12,8,string("Game over!").c_str());
+    mvprintw(13,5,string("Try again? (y/n)").c_str());
+
+    int ch = getch();
+
+    if ( ch == 'y' ) {
+        system("bin/tetris");
+        // Shape shapenew;
+        // Screen screen(" ___ ____ ___ ____ _ ____ \n  |  |___  |  |__/ | [__  \n  |  |___  |  |  \\ | ___] \n  ╭────────────────────╮      \n  │                    │   ╭─────────╮     \n  │                    │   │  Next:  │\n  │                    │   │         │\n  │                    │   │         │\n  │                    │   │         │\n  │                    │   ╰─────────╯   \n  │                    │   \n  │                    │   ╭─────────╮\n  │                    │   │  Score: │\n  │                    │   │    0    │\n  │                    │   │         │   \n  │                    │   ╰─────────╯\n  │                    │   \n  │                    │   ╭─────────╮   \n  │                    │   │  Line:  │    \n  │                    │   │   0     │   \n  │                    │   │         │   \n  │                    │   ╰─────────╯\n  ╰────────────────────╯ \n    k-vernooy/tetris\n");
+        // newShape = true;
+        // count = 0;
+        // frameRate = 20;
+        // game(shapenew, screen);
+    }
+    else {
+        return;
+    }
 }
 
 int main(int argc, char ** argv) {
@@ -136,8 +177,7 @@ int main(int argc, char ** argv) {
     curs_set(0);
 	start_color();
     use_default_colors();
-	init_pair(1, COLOR_MAGENTA, -1);
-    attrset(COLOR_PAIR(1));
+
 
     // Initialize screen and global vars
     Screen screen(screenstr);
@@ -147,20 +187,6 @@ int main(int argc, char ** argv) {
 
     game(shape, screen);
 
-    mvprintw(0,0,string("game over!").c_str());
-    mvprintw(1,0,string("try again? (y/n)").c_str());
-    wrefresh(stdscr);
-
-    nodelay(stdscr, FALSE);
-
-    char testchar = getch();
-
-    if ( testchar == 'y' ) {
-        game(shape, screen);
-    }
-    else if ( testchar == 'n' ) {
-        return 0;
-    }
 
     endwin();
     

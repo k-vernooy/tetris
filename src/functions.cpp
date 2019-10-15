@@ -404,6 +404,9 @@ void Shape::rotate() {
     if ( rotate ) {
         selected = tester;
     }
+    else {
+        beep();
+    }
 
     // add a check here for if the rotate cannot be done
     // if ( rotate cannot be done ) {
@@ -496,6 +499,10 @@ void Shape::move(int movetype) {
         if ( move ) {
             trCoord[1] -= 2;
         }
+        else {
+            //cannot move, error noise
+            beep();
+        }
     }
     else if ( movetype == 2 ) {
         // move rigjt
@@ -508,6 +515,10 @@ void Shape::move(int movetype) {
         if ( move ) {
             trCoord[1] += 2;
         }
+        else {
+            //cannot move, error noise
+            beep();
+        }
     }
     else if ( movetype == 3) {
         // move down
@@ -519,6 +530,9 @@ void Shape::move(int movetype) {
 
         if ( move ) {
             trCoord[0] += 1;
+        }
+        else {
+            beep();
         } 
 
     }

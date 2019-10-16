@@ -531,10 +531,6 @@ void Shape::move(int movetype) {
         if ( move ) {
             trCoord[0] += 1;
         }
-        else {
-            beep();
-        } 
-
     }
 }
 

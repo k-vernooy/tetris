@@ -6,9 +6,24 @@
 #include <unistd.h>
 #include <cstdlib>
 #include <stdio.h>
+#include <string>
 #include "../include/tetris.hpp"
 
 using namespace std;
+
+void checkNext() {
+    int ch = getch();
+
+    if ( ch == 'y' ) {
+        system("tetris");
+    }
+    else if ( ch == 'n' ) {
+        return;
+    }
+    else {
+        checkNext();
+    }
+}
 
 void game(Shape shape, Screen screen) {
 
@@ -25,7 +40,6 @@ void game(Shape shape, Screen screen) {
     while (!shape.gameover) {
 
         if ( shape.dead ) {
-            beep();
             newShape = true;
             screen.addShape(shape);
             screen.points();
@@ -82,7 +96,7 @@ void game(Shape shape, Screen screen) {
         // Get keyinput for if user has input in the fraction of frame
         // Perform actions based on keycode
         int ch = getch();
-
+        bool ground = false;
         if ( ch ) {
             switch (ch) {
                 case KEY_UP:
@@ -98,9 +112,13 @@ void game(Shape shape, Screen screen) {
                     shape.move(2);
                     break;
                 case ' ':
-                    shape.ground(frameRate);
+                    ground = true;
                     break;
             }
+        }
+
+        if ( ground ) {
+            shape.ground(frameRate);
         }
 
         // draw the score to the screen
@@ -116,7 +134,6 @@ void game(Shape shape, Screen screen) {
         // printw(shape.cs.c_str());
         wmove(stdscr,restingCursor[0],restingCursor[1]);
         // wrefresh(stdscr);
-
         // increment the fraction of a block drop count
         count++;
     }
@@ -133,30 +150,19 @@ void game(Shape shape, Screen screen) {
     mvprintw(11, 2, "├");
 
     for ( int i = 3; i < 24; i++ ) {
-        mvprintw(11, i, "─");
-        mvprintw(14, i, "─");
+        mvprintw(11, i, "━");
+        mvprintw(14, i, "━");
     }
 
     mvprintw(14, 23, "┤");
     mvprintw(11, 23, "┤");
 
+    screen.top();
+
     mvprintw(12,8,string("Game over!").c_str());
     mvprintw(13,5,string("Try again? (y/n)").c_str());
 
-    int ch = getch();
-
-    if ( ch == 'y' ) {
-        system("bin/tetris");
-        // Shape shapenew;
-        // Screen screen(" ___ ____ ___ ____ _ ____ \n  |  |___  |  |__/ | [__  \n  |  |___  |  |  \\ | ___] \n  ╭────────────────────╮      \n  │                    │   ╭─────────╮     \n  │                    │   │  Next:  │\n  │                    │   │         │\n  │                    │   │         │\n  │                    │   │         │\n  │                    │   ╰─────────╯   \n  │                    │   \n  │                    │   ╭─────────╮\n  │                    │   │  Score: │\n  │                    │   │    0    │\n  │                    │   │         │   \n  │                    │   ╰─────────╯\n  │                    │   \n  │                    │   ╭─────────╮   \n  │                    │   │  Line:  │    \n  │                    │   │   0     │   \n  │                    │   │         │   \n  │                    │   ╰─────────╯\n  ╰────────────────────╯ \n    k-vernooy/tetris\n");
-        // newShape = true;
-        // count = 0;
-        // frameRate = 20;
-        // game(shapenew, screen);
-    }
-    else {
-        return;
-    }
+    checkNext();
 }
 
 int main(int argc, char ** argv) {
@@ -166,7 +172,7 @@ int main(int argc, char ** argv) {
     // buffer << t.rdbuf();
     // string screenstr = buffer.str();
 
-    string screenstr = " ___ ____ ___ ____ _ ____ \n  |  |___  |  |__/ | [__  \n  |  |___  |  |  \\ | ___] \n  ╭────────────────────╮      \n  │                    │   ╭─────────╮     \n  │                    │   │  Next:  │\n  │                    │   │         │\n  │                    │   │         │\n  │                    │   │         │\n  │                    │   ╰─────────╯   \n  │                    │   \n  │                    │   ╭─────────╮\n  │                    │   │  Score: │\n  │                    │   │    0    │\n  │                    │   │         │   \n  │                    │   ╰─────────╯\n  │                    │   \n  │                    │   ╭─────────╮   \n  │                    │   │  Line:  │    \n  │                    │   │   0     │   \n  │                    │   │         │   \n  │                    │   ╰─────────╯\n  ╰────────────────────╯ \n    k-vernooy/tetris\n";
+    string screenstr = " ___ ____ ___ ____ _ ____ \n  |  |___  |  |__/ | [__  \n  |  |___  |  |  \\ | ___] \n  ┏━━━━━━━━━━━━━━━━━━━━┓      \n  ┃                    ┃   ┏━━━━━━━━━┓     \n  ┃                    ┃   ┃         ┃\n  ┃                    ┃   ┃         ┃\n  ┃                    ┃   ┃         ┃\n  ┃                    ┃   ┃         ┃\n  ┃                    ┃   ┗━━━━━━━━━┛   \n  ┃                    ┃   \n  ┃                    ┃   ┏━━━━━━━━━┓\n  ┃                    ┃   ┃  Score: ┃\n  ┃                    ┃   ┃    0    ┃\n  ┃                    ┃   ┃         ┃   \n  ┃                    ┃   ┗━━━━━━━━━┛\n  ┃                    ┃   \n  ┃                    ┃   ┏━━━━━━━━━┓   \n  ┃                    ┃   ┃  Line:  ┃    \n  ┃                    ┃   ┃   0     ┃   \n  ┃                    ┃   ┃         ┃   \n  ┃                    ┃   ┗━━━━━━━━━┛\n  ┗━━━━━━━━━━━━━━━━━━━━┛ \n    k-vernooy/tetris\n";
 
     // Curses setup: window, color, keyinput
     setlocale(LC_CTYPE, "");

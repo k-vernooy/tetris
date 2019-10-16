@@ -1,20 +1,29 @@
 # tetris
-My rendition of the fantastic tetris game.
+My ascii/cli rendition of tetris. From Wikipedia:
+
+> The objective of [tetris] is to manipulate tetriminos, by moving each one sideways and/or rotating by quarter-turns, so that they form a solid horizontal line without gaps
+
+<img src=
 
 ## Installation
 ### Git:
 ```bash
-git clone thisurl && cd thisurl
+git clone 'https://github.com/k-vernooy/tetris' && cd tetris
 make
 make install
 ```
 ### Homebrew:
-Coming on project completion...
+```bash
+brew tap k-vernooy/tap
+brew install tetris
+```
 
 ## Usage 
 ### Control:
-Use the arrow keys or `WASD` to control the falling blocks:
-- Up: Rotate block
-- Down: Move block down
-- Left/Right: Move block left/right
-
+Use the arrow keys to control the falling blocks:  
+- <kbd>↑</kbd> to rotate the falling block
+- <kbd>→</kbd> to move right
+- <kbd>←</kbd> to move left
+- <kbd>↓</kbd> to soft drop
+- <kbd>SPACE</kbd> to hard drop
+- <kbd>CTRL</kbd>+<kbd>C</kbd> at any time to quit the game

@@ -11,38 +11,56 @@
 
 using namespace std;
 
-void checkNext() {
-    int ch = getch();
+void checkNext(int startLevel) {
 
+    int ch = getch();
+    string systring = "tetris --start-level ";
+
+    systring += to_string(startLevel);
     if ( ch == 'y' ) {
-        system("tetris");
+        system(systring.c_str());
     }
     else if ( ch == 'n' ) {
         return;
     }
     else {
-        checkNext();
+        checkNext(startLevel);
     }
 }
 
-void game(Shape shape, Screen screen) {
+void game(Shape shape, Screen screen, int startLevel) {
 
     // global game vars:
-    int frameRate = 20;
+    // startlevel = 1; framerate = 25
+    // startlevel = 18; frarate = 10
+    int frameRate = 24;
+    for ( int i = 0; i < startLevel; i++ ) {
+        frameRate--;
+    }
+
     bool newShape = true;
     int count = 0;
     unsigned int microseconds = 10000;
 
+    screen.addStartLevel(startLevel);
     // in case the terminal doesnt support invis cursor
     int restingCursor[2] = { 23, 22 };
 
 
     while (!shape.gameover) {
-
+        if ( screen.advancingLevel ) {
+            if ( frameRate > 2 ) {
+                frameRate--;
+            }
+            shape.colors = screen.colors;
+            screen.advancingLevel = false;
+        }
         if ( shape.dead ) {
             newShape = true;
             screen.addShape(shape);
-            screen.points();
+            if (screen.points()) {
+                shape.colors = screen.colors;
+            };
 
             /// TODO HERE:
             // ADD A CHECK TO SEE IF WE CAN STILL 
@@ -162,7 +180,7 @@ void game(Shape shape, Screen screen) {
     mvprintw(12,8,string("Game over!").c_str());
     mvprintw(13,5,string("Try again? (y/n)").c_str());
 
-    checkNext();
+    checkNext(startLevel);
 }
 
 int main(int argc, char ** argv) {
@@ -184,6 +202,13 @@ int main(int argc, char ** argv) {
 	start_color();
     use_default_colors();
 
+    int startLevel = 8;
+
+    for ( int i = 1; i < argc; i++ ) {
+        if ( argv[i] == string("--start-level") ) {
+            startLevel = stoi(argv[i + 1]);
+        }
+    }
 
     // Initialize screen and global vars
     Screen screen(screenstr);
@@ -191,7 +216,7 @@ int main(int argc, char ** argv) {
     // create the shape object
     Shape shape;
 
-    game(shape, screen);
+    game(shape, screen, startLevel);
 
 
     endwin();

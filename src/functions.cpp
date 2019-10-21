@@ -61,7 +61,7 @@ void Screen::top() {
 }
 
 void Screen::draw() {
-    vector<int> colors = { COLOR_YELLOW, COLOR_CYAN, COLOR_BLUE, COLOR_WHITE, COLOR_RED, COLOR_GREEN, COLOR_MAGENTA };
+    // colors = { COLOR_WHITE, COLOR_WHITE, COLOR_BLUE, COLOR_RED, COLOR_RED, COLOR_BLUE, COLOR_WHITE };
 
     for ( int i = 0; i < window.size(); i++ ) {
         for ( int j = 0; j < window[i].size(); j++) {
@@ -193,7 +193,7 @@ void Screen::addShape(Shape shape) {
     // }
 }
 
-void Screen::points() {
+bool Screen::points() {
     vector<int> fullLines = pointCheck();
         
     int linesNew = fullLines.size();
@@ -213,7 +213,32 @@ void Screen::points() {
     updateScore(score);
     updateLines(lines);
     shiftLines(fullLines);
+
+   if ( level == startLevel ) {
+       if ( lines == startLevel * 10 + 10) {
+           advanceLevel();
+           return true;
+       }
+   }
+   else if ( (lines - startLevel * 10 + 10) % 10 == 0 ) {
+        advanceLevel();
+        return true;
+   }
+   return false;
 }
+
+void Screen::advanceLevel() {
+    level++;
+    // change framerate?
+    advancingLevel = true;
+    // redefine colors
+    colors = { COLOR_WHITE, COLOR_WHITE, COLOR_BLUE, COLOR_RED, COLOR_RED, COLOR_BLUE, COLOR_WHITE };
+}
+
+void Screen::addStartLevel(int startLevell) {
+    startLevel = startLevell;
+    level = startLevell;
+};
 
 // basically a constructor to generate a new
 // random shape and fill attributes:

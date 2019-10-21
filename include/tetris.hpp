@@ -85,6 +85,7 @@ class Shape {
     int isdropping;
     
     vector<int> colors = { COLOR_YELLOW, COLOR_CYAN, COLOR_BLUE, COLOR_WHITE, COLOR_RED, COLOR_GREEN, COLOR_MAGENTA };
+    // vector<int> colors = { COLOR_WHITE, COLOR_WHITE, COLOR_BLUE, COLOR_RED, COLOR_RED, COLOR_BLUE, COLOR_WHITE };
     int color;
 
     bool gameover = false;
@@ -110,9 +111,18 @@ class Screen {
     vector<string> shapes = {"1", "2", "3", "4", "5"};
     bool gameover = false;
     int defaultPos[2] = {4,4};
+    vector<int> colors = { COLOR_YELLOW, COLOR_CYAN, COLOR_BLUE, COLOR_WHITE, COLOR_RED, COLOR_GREEN, COLOR_MAGENTA };
+
+
     int score = 0;
     int lines = 0;
+    int level = 0;
+    int startLevel = 1;
+
+    bool advancingLevel = false;
     public:
+        void advanceLevel();
+        void addStartLevel(int startlevel);
         Screen(string test);
         void draw();
         void updateScore(int score);
@@ -122,7 +132,7 @@ class Screen {
         void addShape(Shape shape);
         vector<int> pointCheck();
         void shiftLines(vector<int> lines);
-        void points();
+        bool points();
         void updateLines(int score);
         void top();
         void addNext(vector<vector<bool> > shape, vector<int> color);

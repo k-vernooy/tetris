@@ -55,18 +55,7 @@ void game(Shape shape, Screen screen, int startLevel) {
             shape.colors = screen.colors;
             screen.advancingLevel = false;
         }
-        if ( shape.dead ) {
-            newShape = true;
-            screen.addShape(shape);
-            if (screen.points()) {
-                shape.colors = screen.colors;
-            };
 
-            /// TODO HERE:
-            // ADD A CHECK TO SEE IF WE CAN STILL 
-            // MOVE DOWN, MOVING AFTER DEATH - 
-
-        }
         if ( newShape ) {
             // if we need to generate a new shape, do so;
             // begin dropping the new shape, so
@@ -154,6 +143,19 @@ void game(Shape shape, Screen screen, int startLevel) {
         // wrefresh(stdscr);
         // increment the fraction of a block drop count
         count++;
+
+        if ( shape.dead ) {
+            newShape = true;
+            screen.addShape(shape);
+            if (screen.points()) {
+                shape.colors = screen.colors;
+            };
+
+            /// TODO HERE:
+            // ADD A CHECK TO SEE IF WE CAN STILL 
+            // MOVE DOWN, MOVING AFTER DEATH - 
+
+        }
     }
     nodelay(stdscr, FALSE);
 

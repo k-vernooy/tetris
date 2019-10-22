@@ -213,17 +213,22 @@ bool Screen::points() {
     updateScore(score);
     updateLines(lines);
     shiftLines(fullLines);
+    int test = level - startLevel;
 
-   if ( level == startLevel ) {
-       if ( lines == startLevel * 10 + 10) {
-           advanceLevel();
-           return true;
-       }
-   }
-   else if ( (lines - startLevel * 10 + 10) % 10 == 0 ) {
-        advanceLevel();
-        return true;
-   }
+    window[0][0] = to_string(1);
+
+    if ( level == startLevel ) {
+        if ( lines > startLevel * 10 + 10) {
+            window[0][0] = to_string(0);
+            advanceLevel();
+            return true;
+        }
+    }
+    else if ( (lines - startLevel * 10 + 10) - (test * 10) >= 10 ) {
+            window[0][0] = to_string(0);
+            advanceLevel();
+            return true;
+    }
    return false;
 }
 

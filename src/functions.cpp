@@ -198,7 +198,7 @@ bool Screen::points() {
         
     int linesNew = fullLines.size();
     lines += linesNew;
-    vector<int> points = { 40, 100, 300, 1200};
+    vector<int> points = { 40 * (level), 100 * (level), 300 * (level), 1200 * level};
 
     int point;
 

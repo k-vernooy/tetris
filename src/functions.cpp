@@ -435,7 +435,7 @@ void Shape::rotate() {
         selected = tester;
     }
     else {
-        beep();
+        // beep();
     }
 
     // add a check here for if the rotate cannot be done
@@ -459,7 +459,7 @@ void Shape::rotate() {
     }
 }
 
-void Shape::draw() {
+void Shape::draw( ) {
     int currentPos[2] = { trCoord[0] + defaultPos[1], trCoord[1] + defaultPos[0]};
 
     init_pair(2, color, -1);
@@ -531,7 +531,7 @@ void Shape::move(int movetype) {
         }
         else {
             //cannot move, error noise
-            beep();
+            // beep();
         }
     }
     else if ( movetype == 2 ) {
@@ -547,7 +547,7 @@ void Shape::move(int movetype) {
         }
         else {
             //cannot move, error noise
-            beep();
+            // beep();
         }
     }
     else if ( movetype == 3) {
@@ -565,7 +565,7 @@ void Shape::move(int movetype) {
 }
 
 void Shape::ground(int framerate) {
-    bool moveDown;
+    bool moveDown = true;
     while (moveDown) {
         vector<int> coords = charCoords(selected);
         for ( int i = 0; i < coords.size(); i += 2) {
@@ -578,4 +578,72 @@ void Shape::ground(int framerate) {
             trCoord[0] += 1;
         }
     }
+}
+
+vector<int> Shape::groundCoords(vector<vector<bool> > shape, int down) {
+    vector<int> coords;
+    int currentPos[2] = { trCoord[0] + defaultPos[1] + down, trCoord[1] + defaultPos[0]};
+    // top  coord is pos[2]
+    for ( int i = 0; i < shape.size(); i++ ) {
+        for ( int j = 0; j < shape[i].size(); j++ ) {
+            if ( shape[i][j] ) {
+                
+                int thisPos[2] = { currentPos[0] + i, currentPos[1] + ( 2 * j ) };
+                coords.push_back(thisPos[0]);
+                coords.push_back(thisPos[1]);
+                // add this coord to the array
+            }
+        }
+    }
+    return coords;
+}
+
+void Shape::groundDraw(int down)  {
+    mvprintw(0,0,"5");
+    int currentPos[2] = { trCoord[0] + defaultPos[1] + down, trCoord[1] + defaultPos[0]};
+
+    init_pair(2, color, -1);
+    attrset(COLOR_PAIR(2));
+    for ( int i = 0; i < selected.size(); i++  ) {
+        // for each line;
+        vector<bool> line = selected[i];
+        for ( int i = 0; i < 4; i++ ) {
+            // for each el in line;
+            if ( line[i] ) {
+                // need to draw two side by side fullblocks;
+                mvprintw(currentPos[0], currentPos[1], string("░░").c_str());
+            }
+            else {
+                mvprintw(currentPos[0], currentPos[1], string("").c_str());
+            }
+            currentPos[1] += 2;
+        }
+        currentPos[0] += 1;
+        currentPos[1] = trCoord[1] + defaultPos[0];
+    }
+    init_pair(1, COLOR_WHITE, -1);
+    attrset(COLOR_PAIR(1));
+
+}
+
+void Shape::showGround() {
+    bool moveDown = true;
+    int down = 0;
+    while (moveDown) {
+        vector<int> coords = groundCoords(selected, down);
+        for ( int i = 0; i < coords.size(); i += 2) {
+            if ( currentWin[coords[i] + 1][coords[i + 1] + 2] != " " ) {
+                moveDown = false;
+            }
+        }
+        
+        if (moveDown) {
+            down += 1;
+        }
+    }
+
+    // down = 1;
+    // down = 5;
+
+    groundDraw(down);
 }

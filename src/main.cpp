@@ -28,7 +28,7 @@ void checkNext(int startLevel) {
     }
 }
 
-void game(Shape shape, Screen screen, int startLevel) {
+void game(Shape shape, Screen screen, int startLevel, bool easy) {
 
     // global game vars:
     // startlevel = 1; framerate = 25
@@ -121,6 +121,13 @@ void game(Shape shape, Screen screen, int startLevel) {
                 case ' ':
                     ground = true;
                     break;
+                case 'e':
+                    if ( easy ) {
+                        easy = false;
+                    }
+                    else {
+                        easy = true;
+                    }
             }
         }
 
@@ -136,8 +143,15 @@ void game(Shape shape, Screen screen, int startLevel) {
         wmove(stdscr,0,0);
 
         screen.draw();
+
+        if (easy) {
+            shape.showGround();
+        }
+
         shape.draw();
         screen.top();
+
+
         // printw(shape.cs.c_str());
         wmove(stdscr,restingCursor[0],restingCursor[1]);
         // wrefresh(stdscr);
@@ -205,10 +219,14 @@ int main(int argc, char ** argv) {
     use_default_colors();
 
     int startLevel = 8;
+    bool easy = false;
 
     for ( int i = 1; i < argc; i++ ) {
         if ( argv[i] == string("--start-level") ) {
             startLevel = stoi(argv[i + 1]);
+        }
+        else if ( argv[i] == string("--easy")) {
+            easy = true;
         }
     }
 
@@ -218,7 +236,7 @@ int main(int argc, char ** argv) {
     // create the shape object
     Shape shape;
 
-    game(shape, screen, startLevel);
+    game(shape, screen, startLevel, easy);
 
 
     endwin();

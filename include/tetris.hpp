@@ -11,6 +11,9 @@ class Shape {
     Shape();
     int defaultPos[2] = {2,4};
     vector<vector<bool> > selected;
+    void showGround();
+    void groundDraw(int down);
+    vector<int> groundCoords(vector<vector<bool> > shape, int down);
     vector<vector<vector<bool> > > shapecoords = {
         {
             // the 'o' block

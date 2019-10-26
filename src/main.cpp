@@ -104,6 +104,8 @@ void game(Shape shape, Screen screen, int startLevel, bool easy) {
         // Perform actions based on keycode
         int ch = getch();
         bool ground = false;
+        bool breake = false;
+
         if ( ch ) {
             switch (ch) {
                 case KEY_UP:
@@ -128,11 +130,18 @@ void game(Shape shape, Screen screen, int startLevel, bool easy) {
                     else {
                         easy = true;
                     }
+                case 'r':
+                    breake = true;
+                    break;
             }
         }
 
         if ( ground ) {
             shape.ground(frameRate);
+        }
+
+        if ( breake ) {
+            break;
         }
 
         // draw the score to the screen

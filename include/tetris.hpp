@@ -8,12 +8,13 @@ using namespace std;
 
 class Shape {
     public:
+    
     Shape();
-    int defaultPos[2] = {2,4};
+
+    int defaultPos[2];
+    int trCoord[2];
+
     vector<vector<bool> > selected;
-    void showGround();
-    void groundDraw(int down);
-    vector<int> groundCoords(vector<vector<bool> > shape, int down);
     vector<vector<vector<bool> > > shapecoords = {
         {
             // the 'o' block
@@ -81,22 +82,18 @@ class Shape {
     vector<vector<string> > currentWin;
     vector<vector<bool> > nextUp;
 
-
     int shapeHeight = 0;
-    int trCoord[2] = {0,9};
     int shapeRotation = 1;
     int isdropping;
     
-    vector<int> colors = { COLOR_YELLOW, COLOR_CYAN, COLOR_BLUE, COLOR_WHITE, COLOR_RED, COLOR_GREEN, COLOR_MAGENTA };
     // vector<int> colors = { COLOR_WHITE, COLOR_WHITE, COLOR_BLUE, COLOR_RED, COLOR_RED, COLOR_BLUE, COLOR_WHITE };
+    vector<int> colors = { COLOR_YELLOW, COLOR_CYAN, COLOR_BLUE, COLOR_WHITE, COLOR_RED, COLOR_GREEN, COLOR_MAGENTA };
     int color;
 
     bool gameover = false;
     int shapetype[2];
     bool cannotMove = false;
     bool dead = false;
-
-    string cs;
 
     vector<int> charCoords(vector<vector<bool> > shape);
     void generate(vector<vector<string> > window);
@@ -106,14 +103,20 @@ class Shape {
     void rotate();
     void move(int movetype);
     void ground(int framerate);
+    void showGround();
+    void groundDraw(int down);
+    vector<int> groundCoords(vector<vector<bool> > shape, int down);
+
 };
+
+
 
 class Screen {
 
     public: vector<vector<string> > window; 
     vector<string> shapes = {"1", "2", "3", "4", "5"};
     bool gameover = false;
-    int defaultPos[2] = {4,4};
+    int defaultPos[2] = {1,1};
     vector<int> colors = { COLOR_YELLOW, COLOR_CYAN, COLOR_BLUE, COLOR_WHITE, COLOR_RED, COLOR_GREEN, COLOR_MAGENTA };
 
 

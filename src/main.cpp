@@ -11,12 +11,17 @@
 
 using namespace std;
 
-void checkNext(int startLevel) {
+void checkNext(int startLevel, bool easy) {
 
     int ch = getch();
     string systring = "tetris --start-level ";
 
     systring += to_string(startLevel);
+
+    if (easy) {
+        systring += " --easy";
+    }
+    
     if ( ch == 'y' ) {
         system(systring.c_str());
     }
@@ -24,7 +29,7 @@ void checkNext(int startLevel) {
         return;
     }
     else {
-        checkNext(startLevel);
+        checkNext(startLevel, easy);
     }
 }
 
@@ -107,32 +112,31 @@ void game(Shape shape, Screen screen, int startLevel, bool easy) {
         bool breake = false;
 
         if ( ch ) {
-            switch (ch) {
-                case KEY_UP:
-                    shape.rotate();
-                    break;
-                case KEY_DOWN:
-                    shape.move(3);
-                    break;
-                case KEY_LEFT:
-                    shape.move(1);
-                    break;
-                case KEY_RIGHT:
-                    shape.move(2);
-                    break;
-                case ' ':
-                    ground = true;
-                    break;
-                case 'e':
-                    if ( easy ) {
-                        easy = false;
-                    }
-                    else {
-                        easy = true;
-                    }
-                case 'r':
-                    breake = true;
-                    break;
+            if ( ch == KEY_UP) {
+                shape.rotate();
+            }
+            else if ( ch == KEY_DOWN) {
+                shape.move(3);
+            }
+            else if ( ch == KEY_LEFT) {
+                shape.move(1);
+            }
+            else if ( ch == KEY_RIGHT) {
+                shape.move(2);
+            }
+            else if ( ch == ' ' ) {
+                ground = true;
+            }   
+            else if ( ch == 'e' ) {
+                if ( easy ) {
+                    easy = false;
+                }
+                else {
+                    easy = true;
+                }
+            }
+            else if ( ch == 'r' ) {
+                breake = true;
             }
         }
 
@@ -162,7 +166,7 @@ void game(Shape shape, Screen screen, int startLevel, bool easy) {
 
 
         // printw(shape.cs.c_str());
-        wmove(stdscr,restingCursor[0],restingCursor[1]);
+        wmove(stdscr,0,0);
         // wrefresh(stdscr);
         // increment the fraction of a block drop count
         count++;
@@ -180,32 +184,33 @@ void game(Shape shape, Screen screen, int startLevel, bool easy) {
 
         }
     }
+    
     nodelay(stdscr, FALSE);
 
     wrefresh(stdscr);
-    for ( int i = 11; i < 15; i++  ) {
+    for ( int i = 8; i < 12; i++  ) {
         for ( int j = 3; j < 23; j++ ) {
             mvprintw(i,j," ");
         }
     }
 
-    mvprintw(14, 2, "├");
-    mvprintw(11, 2, "├");
+    mvprintw(11, 2, "┣");
+    mvprintw(8, 2, "┣");
 
     for ( int i = 3; i < 24; i++ ) {
+        mvprintw(8, i, "━");
         mvprintw(11, i, "━");
-        mvprintw(14, i, "━");
     }
 
-    mvprintw(14, 23, "┤");
-    mvprintw(11, 23, "┤");
+    mvprintw(11, 23, "┫");
+    mvprintw(8, 23, "┫");
 
     screen.top();
 
-    mvprintw(12,8,string("Game over!").c_str());
-    mvprintw(13,5,string("Try again? (y/n)").c_str());
+    mvprintw(9,8,string("Game over!").c_str());
+    mvprintw(10,5,string("Try again? (y/n)").c_str());
 
-    checkNext(startLevel);
+    checkNext(startLevel, easy);
 }
 
 int main(int argc, char ** argv) {
@@ -215,7 +220,7 @@ int main(int argc, char ** argv) {
     // buffer << t.rdbuf();
     // string screenstr = buffer.str();
 
-    string screenstr = " ___ ____ ___ ____ _ ____ \n  |  |___  |  |__/ | [__  \n  |  |___  |  |  \\ | ___] \n  ┏━━━━━━━━━━━━━━━━━━━━┓      \n  ┃                    ┃   ┏━━━━━━━━━┓     \n  ┃                    ┃   ┃         ┃\n  ┃                    ┃   ┃         ┃\n  ┃                    ┃   ┃         ┃\n  ┃                    ┃   ┃         ┃\n  ┃                    ┃   ┗━━━━━━━━━┛   \n  ┃                    ┃   \n  ┃                    ┃   ┏━━━━━━━━━┓\n  ┃                    ┃   ┃  Score: ┃\n  ┃                    ┃   ┃    0    ┃\n  ┃                    ┃   ┃         ┃   \n  ┃                    ┃   ┗━━━━━━━━━┛\n  ┃                    ┃   \n  ┃                    ┃   ┏━━━━━━━━━┓   \n  ┃                    ┃   ┃  Line:  ┃    \n  ┃                    ┃   ┃   0     ┃   \n  ┃                    ┃   ┃         ┃   \n  ┃                    ┃   ┗━━━━━━━━━┛\n  ┗━━━━━━━━━━━━━━━━━━━━┛ \n    k-vernooy/tetris\n";
+    string screenstr = "  ┏━━k-vernooy/tetris━━┓\n  ┃                    ┃\n  ┃                    ┃   ┏━━next━━━┓\n  ┃                    ┃   ┃         ┃\n  ┃                    ┃   ┃         ┃\n  ┃                    ┃   ┃         ┃\n  ┃                    ┃   ┗━━━━━━━━━┛\n  ┃                    ┃\n  ┃                    ┃   ┏━━score━━┓\n  ┃                    ┃   ┃         ┃\n  ┃                    ┃   ┃  0      ┃\n  ┃                    ┃   ┃         ┃\n  ┃                    ┃   ┗━━━━━━━━━┛\n  ┃                    ┃\n  ┃                    ┃   ┏━━lines━━┓\n  ┃                    ┃   ┃         ┃\n  ┃                    ┃   ┃  0      ┃\n  ┃                    ┃   ┃         ┃\n  ┃                    ┃   ┗━━━━━━━━━┛\n  ┗━━━━━━━━━━━━━━━━━━━━┛\n                 ";
 
     // Curses setup: window, color, keyinput
     setlocale(LC_CTYPE, "");

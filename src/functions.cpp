@@ -189,6 +189,17 @@ void Screen::addShape(Shape shape) {
     // }
 }
 
+void whiteLines(vector<int> lines) {
+    // if ( lines.size() > 0  ) {
+    //     for ( int i = 0; i < lines.size(); i++ ) {
+    //         for ( int x = 3; x < 23; x++) {
+    //             mvprintw(lines[i], x, "██");
+    //         }
+    //     }
+    //     // usleep(1250000);
+    // }
+}
+
 bool Screen::points() {
     vector<int> fullLines = pointCheck();
         
@@ -208,6 +219,7 @@ bool Screen::points() {
     score += point;
     updateScore(score);
     updateLines(lines);
+    whiteLines(fullLines);
     shiftLines(fullLines);
     int test = level - startLevel;
 
@@ -344,6 +356,7 @@ vector<int> Screen::pointCheck() {
     return fullLines;
 }
 
+
 void Screen::shiftLines(vector<int> lines) {
 
     for ( int i = 0; i < lines.size(); i++ ) {
@@ -352,9 +365,40 @@ void Screen::shiftLines(vector<int> lines) {
         } 
     }
 
+    if ( lines.size() > 0  ) {
+        for ( int i = 0; i < lines.size(); i++ ) {
+            for ( int x = 3; x < 23; x++) {
+                mvprintw(lines[i],x,"█");
+            } 
+        }
+
+        move(0,0);
+
+        refresh();
+        usleep(45000);
+
+        
+        draw();
+        move(0,0);
+
+        refresh();
+        usleep(25000);
+
+        for ( int i = 0; i < lines.size(); i++ ) {
+            for ( int x = 3; x < 23; x++) {
+                mvprintw(lines[i],x,"█");
+            } 
+        }
+        move(0,0);
+
+        refresh();
+        usleep(45000);
+
+    }
+
     for ( int i = 0; i < lines.size(); i++ ) {
         vector<string> line = window[lines[i]];
-        for ( int j = lines[i] - 1; j > 4; j-- ) {
+        for ( int j = lines[i] - 1; j > 0; j-- ) {
             for ( int x = 5; x < 25; x++ ) {
                 window[j + 1][x] = window[j][x];
             }

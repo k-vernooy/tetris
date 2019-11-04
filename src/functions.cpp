@@ -52,22 +52,18 @@ vector<vector<string> > Screen::getScr() {
 
 void Screen::top() {
     move(0,0);
-    for ( int i = 0; i < 4; i++ ) {
-        for ( int j = 0; j < window[i].size(); j++) {
-            printw(window[i][j].c_str());
-        }
-        printw(string("\n").c_str());
-    }
+    printw("  ┏━━k-vernooy/tetris━━┓       ");
 }
 
 void Screen::draw() {
     // colors = { COLOR_WHITE, COLOR_WHITE, COLOR_BLUE, COLOR_RED, COLOR_RED, COLOR_BLUE, COLOR_WHITE };
-
     for ( int i = 0; i < window.size(); i++ ) {
         for ( int j = 0; j < window[i].size(); j++) {
             string cur = window[i][j];
-            if ( (( i >= 4 && i < 22 ) && ( j > 4 && j < 25)) || ( ( i >= 6 && i < 9 ) && ( j > 33 && j < 43) )) {
+            if ( (( i >= 1 && i < 19 ) && ( j > 4 && j < 25)) || ( ( i >= 3 && i < 6 ) && ( j > 33 && j < 43) )) {
+                // printw("*");
                 // cur will be num between 1 and 14;
+
                 if ( cur != " ") {
 
                     int colorNum;
@@ -112,7 +108,7 @@ void Screen::draw() {
 
 void Screen::addNext(vector<vector<bool> > shape, vector<int> color) {
     int x = 34;
-    int y = 6;
+    int y = 3;
 
     for ( int i = 0; i < 3; i++ ) {
 
@@ -133,7 +129,7 @@ void Screen::addNext(vector<vector<bool> > shape, vector<int> color) {
 }
 
 void Screen::updateScore(int score) {
-    int x = 13;
+    int x = 10;
     int y = 36;
 
     window[x][y] = to_string(score);
@@ -148,7 +144,7 @@ void Screen::updateScore(int score) {
 }
 
 void Screen::updateLines(int score) {
-    int x = 19;
+    int x = 16;
     int y = 36;
 
     window[x][y] = to_string(score);
@@ -215,8 +211,6 @@ bool Screen::points() {
     shiftLines(fullLines);
     int test = level - startLevel;
 
-    window[0][0] = to_string(1);
-
     if ( level == startLevel ) {
         if ( lines > startLevel * 10 + 10) {
             window[0][0] = to_string(0);
@@ -263,8 +257,6 @@ Shape::Shape() {
 void Shape::generate(vector<vector<string> > window) {
     dead = false;
     currentWin = window;
-    trCoord[0] = 0;
-    trCoord[1] = 9;
 
     shapetype[0] = shapetype[1];
 
@@ -307,10 +299,13 @@ void Shape::generate(vector<vector<string> > window) {
     defaultPos[0] = 0;
     defaultPos[1] = 2;
 
+    trCoord[0] = 0;
+    trCoord[1] = 9;
+
     // can prob add something here to center shape; ie shapeWidth;
     trCoord[0] -= shapeHeight;
-    trCoord[0] -= 1;
-    isdropping = shapeHeight + 2;
+    trCoord[0] -= 2;
+    isdropping = shapeHeight;
 
 }
 
@@ -324,7 +319,7 @@ string Screen::getChar(int x, int y) {
 vector<int> Screen::pointCheck() {
     vector<int> fullLines;
 
-    for ( int i = 4; i < 22; i++ ) {
+    for ( int i = 1; i < 19; i++ ) {
         bool full = true;
 
         for ( int k = 5; k < 25; k++ ) {
@@ -495,7 +490,7 @@ void Shape::fall() {
             cannotFall = true;
         };
     }
-    // psuedocode:
+
     if (cannotFall) {
         dead = true;
     }

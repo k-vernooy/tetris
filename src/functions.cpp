@@ -71,7 +71,7 @@ void Screen::draw() {
 
                     if (stoi(cur) % 2 == 0) {
                         colorNum = stoi(cur) / 2 - 1;
-                        printChar = "▋";
+                        printChar = "▌";
                     }
                     else {
                         colorNum = floor(stoi(cur) / 2);
@@ -365,6 +365,10 @@ void Screen::shiftLines(vector<int> lines) {
         } 
     }
 
+    usleep(45000);
+    move(0,0);
+    refresh();
+
     if ( lines.size() > 0  ) {
         for ( int i = 0; i < lines.size(); i++ ) {
             for ( int x = 3; x < 23; x++) {
@@ -510,7 +514,7 @@ void Shape::draw( ) {
             // for each el in line;
             if ( line[i] ) {
                 // need to draw two side by side fullblocks;
-                mvprintw(currentPos[0], currentPos[1], string("█▋").c_str());
+                mvprintw(currentPos[0], currentPos[1], string("█▌").c_str());
             }
             else {
                 mvprintw(currentPos[0], currentPos[1], string("").c_str());

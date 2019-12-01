@@ -9,7 +9,7 @@ My ascii/cli rendition of tetris. From Wikipedia:
 ### Git:
 ```bash
 git clone 'https://github.com/k-vernooy/tetris' && cd tetris
-make
+make  # if on linux, run 'make ubuntucompile' instead for proper characters
 make install
 ```
 ### Homebrew:

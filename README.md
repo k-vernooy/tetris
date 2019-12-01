@@ -6,11 +6,13 @@ My ascii/cli rendition of tetris. From Wikipedia:
 <img src=docs/modern.gif style='margin-left:auto;margin-right:auto'>
 
 ## Installation
+
 ### Git:
+If on linux, install libncurses-dev as dependency.
 ```bash
 git clone 'https://github.com/k-vernooy/tetris' && cd tetris
 make  # if on linux, run 'make ubuntucompile' instead for proper characters
-make install
+sudo make install
 ```
 ### Homebrew:
 ```bash

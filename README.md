@@ -3,14 +3,16 @@ My ascii/cli rendition of tetris. From Wikipedia:
 
 > The objective of [tetris] is to manipulate tetriminos, by moving each one sideways and/or rotating by quarter-turns, so that they form a solid horizontal line without gaps
 
-<img src=docs/cut.gif style='margin-left:auto;margin-right:auto'>
+<img src=docs/modern.gif style='margin-left:auto;margin-right:auto'>
 
 ## Installation
+
 ### Git:
+If on linux, install libncurses-dev as dependency.
 ```bash
 git clone 'https://github.com/k-vernooy/tetris' && cd tetris
-make
-make install
+make  # if on linux, run 'make ubuntucompile' instead for proper characters
+sudo make install
 ```
 ### Homebrew:
 ```bash

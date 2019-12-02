@@ -60,10 +60,11 @@ class Shape {
         },
         {
             // the t block
-            {0,0,0,0},
-            {0,1,0,0},
-            {1,1,1,0},
-            {0,0,0,0}
+            {0,0,0,0,0},
+            {0,0,1,0,0},
+            {0,1,1,1,0},
+            {0,0,0,0,0},
+            {0,0,0,0,0},
         }
     };
 
@@ -106,6 +107,7 @@ class Shape {
     void showGround();
     void groundDraw(int down);
     vector<int> groundCoords(vector<vector<bool> > shape, int down);
+    void checkDeath();
 
 };
 

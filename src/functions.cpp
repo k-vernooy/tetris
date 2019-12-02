@@ -253,6 +253,14 @@ void Screen::addStartLevel(int startLevell) {
 
 // basically a constructor to generate a new
 // random shape and fill attributes:
+int randNum() {
+    random_device rd; 
+    mt19937 eng(rd()); 
+    uniform_int_distribution<> distr(1, 7);
+
+    return distr(eng) - 1;  
+}
+
 
 Shape::Shape() {
     random_device rd; 
@@ -272,11 +280,11 @@ void Shape::generate(vector<vector<string> > window) {
 
     shapetype[0] = shapetype[1];
 
-    random_device rd; 
-    mt19937 eng(rd()); 
-    uniform_int_distribution<> distr(1, 7);
+    int rand = randNum();
 
-    int rand = distr(eng) - 1; 
+    while ( rand == shapetype[0] ) {
+        rand = randNum();
+    }
 
     shapetype[1] = rand;
 
@@ -450,22 +458,33 @@ void Shape::drop() {
 
 }
 
-void Shape::rotate() {
-    // function to rotate the matrix
-    vector<vector<bool> > tester = selected;
 
-    // Consider all squares one by one 
-    for (int x = 0; x < 4 / 2; x++) { 
-        for (int y = x; y < 4 - x - 1; y++) { 
-            int temp = tester[x][y]; 
-            tester[x][y] = tester[y][4-1-x]; 
-            tester[y][4-1-x] = tester[4-1-x][4-1-y]; 
-            tester[4-1-x][4-1-y] = tester[4-1-y][x]; 
-            tester[4-1-y][x] = temp; 
+void Shape::rotate() {
+    // Need to allocate an array to store the transform
+    vector<vector<bool> > temp;
+
+    for ( int i = 0; i < selected.size(); i++ ) {
+        vector<bool> row;
+        for ( int j = 0; j < selected.size(); j++) {
+            row.push_back(0);
+        }
+        temp.push_back(row);
+    }
+
+    int count = 0;        // count variable
+    int count2 = 0;      // 2nd count variable
+
+    for (count = 0; count < selected.size(); count++) {
+        for (count2 = 0; count2 < selected[0].size(); count2++) {
+            // Clockwise rotation
+            // temp[count2][temp[0].size() - count - 1] = selected[count][count2];
+            // Counter-clockwise rotation
+            temp[temp.size() - count2 - 1][count] = selected[count][count2];
         }
     }
 
-    vector<int> coords = charCoords(tester);
+
+    vector<int> coords = charCoords(temp);
     bool rotate = true;
     for ( int i = 0; i < coords.size(); i += 2 ) {
         string chosen = currentWin[coords[i] - 1][coords[i + 1] + 2];
@@ -475,7 +494,7 @@ void Shape::rotate() {
     }
 
     if ( rotate ) {
-        selected = tester;
+        selected = temp;
     }
     else {
         // beep();

@@ -106,19 +106,17 @@ void Screen::draw() {
     }
 }
 
-void Screen::addNext(vector<vector<bool> > shape, vector<int> color) {
+void Screen::addNext(vector<vector<bool> > shape, vector<int> colors) {
     int x = 34;
     int y = 3;
 
     for ( int i = 0; i < 3; i++ ) {
 
         vector<bool> line = shape[i];
-        for ( int j = 0; j < line.size(); j++ ) {
-            // window[y + i][x + 2 * j] = "t";
-            // window[y + i][x + 2 * j + 1] = "t";
+        for ( int j = 0; j < 4; j++ ) {
             if ( line[j] ) {
-                window[y + i][x + ( 2 * j )] = to_string(color[0]);
-                window[y + i][x + ( 2 * j ) + 1] = to_string(color[1]);
+                window[y + i][x + ( 2 * j )] = to_string(colors[0]);
+                window[y + i][x + ( 2 * j ) + 1] = to_string(colors[1]);
             }
             else {
                 window[y + i][x + ( 2 * j )] = " ";
@@ -547,29 +545,21 @@ void Shape::draw( ) {
     attrset(COLOR_PAIR(1));
 }
 
-void Shape::fall() {
-
+void Shape::checkDeath() {
     bool cannotFall = false;
     vector<int> coords = charCoords(selected);
     for ( int i = 0; i < coords.size(); i = i + 2) {
         string check = currentWin[coords[i]][coords[i + 1] + 3];
-        if ( check != " " && check != "│" ) {
+        if ( check != " ") {
             cannotFall = true;
         };
     }
 
-    if (cannotFall) {
-        dead = true;
-    }
-    else {
-        trCoord[0]++;
-    }
-    // just move down the shape, no need to draw here
-    // if !( spaceBelowAfterMoveDown ) {
-    //  //cannot move down any more, incorporate this one into the board
-    //  screen.drawshape(selected, trcoord[0], trcoord[1]);
-    //}
+    dead = cannotFall;
+}
 
+void Shape::fall() {
+    trCoord[0]++;
 }
 
 void Shape::move(int movetype) {

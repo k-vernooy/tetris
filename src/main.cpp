@@ -11,11 +11,11 @@
 
 using namespace std;
 
-void checkNext(int startLevel, bool easy) {
+void checkNext(int startLevel, bool easy, string basename) {
 
     int ch = getch();
-    string systring = "tetris --start-level ";
-
+    string systring = basename;
+    systring += " --start-level ";
     systring += to_string(startLevel);
 
     if (easy) {
@@ -29,11 +29,11 @@ void checkNext(int startLevel, bool easy) {
         return;
     }
     else {
-        checkNext(startLevel, easy);
+        checkNext(startLevel, easy, basename);
     }
 }
 
-void game(Shape shape, Screen screen, int startLevel, bool easy) {
+void game(Shape shape, Screen screen, int startLevel, bool easy, string basename) {
 
     // global game vars:
     // startlevel = 1; framerate = 25
@@ -73,15 +73,10 @@ void game(Shape shape, Screen screen, int startLevel, bool easy) {
             }
             newShape = false;
         }
+        else if ( (count + 1) % frameRate == 0 ) {
+            shape.checkDeath();
+        }
         else if ( count % frameRate == 0) {
-            // speed up:
-            // if ( frameRate > 2 ) {
-            //     frameRate--;
-            // }
-            // else {
-            //     frameRate = 1;
-            // }
-
             // if the shape is still dropping
             if (shape.isdropping > 0) {
                 // if the shape is high enough that we need to 
@@ -177,17 +172,14 @@ void game(Shape shape, Screen screen, int startLevel, bool easy) {
             if (screen.points()) {
                 shape.colors = screen.colors;
             };
-
-            /// TODO HERE:
-            // ADD A CHECK TO SEE IF WE CAN STILL 
-            // MOVE DOWN, MOVING AFTER DEATH - 
-
         }
     }
     
+    // wait for keyinput
     nodelay(stdscr, FALSE);
-
     wrefresh(stdscr);
+
+    // print the death screen
     for ( int i = 8; i < 12; i++  ) {
         for ( int j = 3; j < 23; j++ ) {
             mvprintw(i,j," ");
@@ -210,7 +202,7 @@ void game(Shape shape, Screen screen, int startLevel, bool easy) {
     mvprintw(9,8,string("Game over!").c_str());
     mvprintw(10,5,string("Try again? (y/n)").c_str());
 
-    checkNext(startLevel, easy);
+    checkNext(startLevel, easy, basename);
 }
 
 int main(int argc, char ** argv) {
@@ -250,7 +242,9 @@ int main(int argc, char ** argv) {
     // create the shape object
     Shape shape;
 
-    game(shape, screen, startLevel, easy);
+    string basename = argv[0];
+
+    game(shape, screen, startLevel, easy, basename);
 
 
     endwin();

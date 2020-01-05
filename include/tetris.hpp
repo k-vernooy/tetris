@@ -135,9 +135,8 @@ class Shape {
 
 
 class Screen {
-
-    vector<string> shapes = {"1", "2", "3", "4", "5"};
-    bool gameover = false;
+    // game states
+    // bool gameover = false;
     int defaultPos[2] = {1,1};
 
     // game stats
@@ -156,21 +155,23 @@ class Screen {
         vector<vector<string> > window; 
         vector<int> colors = { COLOR_YELLOW, COLOR_CYAN, COLOR_BLUE, COLOR_WHITE, COLOR_RED, COLOR_GREEN, COLOR_MAGENTA };
 
-        Screen(); // constructor for generating an array
+        Screen(int startlevel); // constructor for generating an array and setting a start level
 
-        void advanceLevel();
-        void addStartLevel(int startlevel);
+        // graphics methods for updating the screen
         void draw();
-        void updateScore(int score);
-        void gameOver();
-        string getChar(int x, int y);
-        vector<vector<string> > getScr();
+        void top();
+        void updateIntDisplays(int score, int x, int y);
+        string getChar(int x, int y); // returns string at coordinates of screen
+
+        void addStartLevel(int startlevel); // update level variables
+        void advanceLevel(); // level up the game
+
+        // void gameOver();
+
         void addShape(Shape shape);
         vector<int> pointCheck();
         void shiftLines(vector<int> lines);
         bool points();
-        void updateLines(int score);
-        void top();
         void addNext(vector<vector<bool> > shape, vector<int> color);
 };
 

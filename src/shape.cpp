@@ -198,10 +198,11 @@ void Shape::rotate() {
 
     for (count = 0; count < selected.size(); count++) {
         for (count2 = 0; count2 < selected[0].size(); count2++) {
-            // clockwise rotation
-            // temp[count2][temp[0].size() - count - 1] = selected[count][count2];
             // counter-clockwise rotation
             temp[temp.size() - count2 - 1][count] = selected[count][count2];
+            
+            // clockwise rotation
+            // temp[count2][temp[0].size() - count - 1] = selected[count][count2];
         }
     }
 

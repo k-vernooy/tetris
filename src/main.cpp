@@ -26,7 +26,7 @@ int main(int argc, char ** argv) {
     }
 
     // initialize screen and shape
-    Screen screen;
+    Screen screen(startLevel);
     Shape shape;
     
     // record how the user is calling the program

@@ -1,6 +1,7 @@
 #include "../include/tetris.hpp"
 
-void game(Shape shape, Screen screen, int startLevel, bool easy, string basename) { // the main gameloop
+void game(Shape shape, Screen screen, int startLevel, bool easy, string basename) { 
+    // the main gameloop
     
     // general game constants 
     int frameRate = 24;
@@ -9,8 +10,6 @@ void game(Shape shape, Screen screen, int startLevel, bool easy, string basename
     bool newShape = true;
     int count = 0;
     unsigned int microseconds = 10000;
-
-    screen.addStartLevel(startLevel);
     
     // in case the terminal doesnt support invis cursor
     int restingCursor[2] = { 23, 22 };
@@ -31,7 +30,7 @@ void game(Shape shape, Screen screen, int startLevel, bool easy, string basename
             // if we need to generate a new shape, do so;
             // begin dropping the new shape, so
             // we no longer need a new shape.
-            shape.generate(screen.getScr());
+            shape.generate(screen.window);
             screen.addNext(shape.nextUp, shape.nextchars);
             shape.drop();
            
@@ -76,6 +75,7 @@ void game(Shape shape, Screen screen, int startLevel, bool easy, string basename
         bool breake = false;
 
         if ( ch ) {
+            // handle different moves
             if ( ch == KEY_UP) {
                 shape.rotate();
             }
@@ -90,7 +90,8 @@ void game(Shape shape, Screen screen, int startLevel, bool easy, string basename
             }
             else if ( ch == ' ' ) {
                 ground = true;
-            }   
+            }
+            // turn on or off guide mode
             else if ( ch == 'e' ) {
                 if ( easy ) {
                     easy = false;
@@ -99,21 +100,21 @@ void game(Shape shape, Screen screen, int startLevel, bool easy, string basename
                     easy = true;
                 }
             }
+            // instant restart
             else if ( ch == 'r' ) {
                 breake = true;
             }
         }
 
+        // hard drop the shape
         if ( ground ) {
             shape.ground(frameRate);
         }
 
+        // take the game to the death screen
         if ( breake ) {
             break;
         }
-
-        // draw the score to the screen
-        // screen.updateScore(count);
 
         // move the cursor, print the screen,
         screen.draw();

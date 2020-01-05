@@ -3,7 +3,7 @@ My ascii/cli rendition of tetris. From Wikipedia:
 
 > The objective of [tetris] is to manipulate tetriminos, by moving each one sideways and/or rotating by quarter-turns, so that they form a solid horizontal line without gaps
 
-<img src=docs/out.gif width=600px>
+<img src=docs/out.gif width=500px>
 
 ## Installation
 

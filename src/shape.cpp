@@ -16,15 +16,18 @@ Shape::Shape() {
 void Shape::generate(vector<vector<string> > window) {
     // moves the next random state to the current state
     // and generates the next random state
-
+    
+    // fix death state
     dead = false;
-    currentWin = window;
+    // move old data to new spot
     shapetype[0] = shapetype[1];
+    currentWin = window;
 
-    int rand = randNum();
+    int rand = randNum(1, 7);
 
     while ( rand == shapetype[0] )
-        rand = randNum();
+        // avoid repeating shapes
+        rand = randNum(1, 7);
 
     shapetype[1] = rand;
     nextUp = shapecoords[shapetype[1]];
@@ -41,10 +44,9 @@ void Shape::generate(vector<vector<string> > window) {
         vector<bool> line = selected[i];
         bool found = false;
 
-        for ( int x = 0; x < line.size(); x++ ) {
+        for ( int x = 0; x < line.size(); x++ )
             if ( i == 1 )
                 found = true;
-        }
 
         if ( found )
             shapeHeight++;

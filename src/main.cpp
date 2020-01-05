@@ -4,7 +4,7 @@ using namespace std;
 
 int main(int argc, char ** argv) {
 
-    // Curses setup: window, color, keyinput
+    // curses window setup
     setlocale(LC_CTYPE, "");
     initscr();
     noecho();
@@ -14,27 +14,28 @@ int main(int argc, char ** argv) {
 	start_color();
     use_default_colors();
 
+    // set and modify user settings
     int startLevel = 8;
     bool easy = false;
 
     for ( int i = 1; i < argc; i++ ) {
-        if ( argv[i] == string("--start-level") ) {
+        if ( argv[i] == string("--start-level") )
             startLevel = stoi(argv[i + 1]);
-        }
-        else if ( argv[i] == string("--easy")) {
+        else if ( argv[i] == string("--easy"))
             easy = true;
-        }
     }
 
-    // Initialize screen and shape
+    // initialize screen and shape
     Screen screen;
     Shape shape;
     
-    // how the user is calling the program
+    // record how the user is calling the program
     string basename = argv[0];
-
+    
+    // call mainloop
     game(shape, screen, startLevel, easy, basename);
 
+    // curses cleanup
     endwin();
     return 0;
 }

@@ -22,7 +22,7 @@ using namespace std;
 string readLine(string str, int n);
 bool isNumber(const string& s);
 void checkNext(int startLevel, bool easy, string basename);
-int randNum();
+int randNum(int start, int end);
 
 // declaring classes for the shape and screen
 class Shape {

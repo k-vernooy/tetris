@@ -8,11 +8,11 @@ all: compile
 
 compile:
 	@mkdir -p ${BINDIR}
-	@${CC} -std=c++11 src/main.cpp src/shape.cpp src/screen.cpp src/util.cpp src/game.cpp src/functions.cpp -lncurses -o ${BINDIR}/tetris
+	@${CC} -std=c++11 src/main.cpp src/shape.cpp src/screen.cpp src/game.cpp src/functions.cpp -lncurses -o ${BINDIR}/tetris
 
 ubuntucompile:
 	@mkdir -p ${BINDIR}
-	@${CC} -std=c++11 src/main.cpp src/shape.cpp src/screen.cpp src/util.cpp src/game.cpp src/functions.cpp -lncursesw -o ${BINDIR}/tetris
+	@${CC} -std=c++11 src/main.cpp src/shape.cpp src/screen.cpp src/game.cpp src/functions.cpp -lncursesw -o ${BINDIR}/tetris
 
 install:
 	@install -m 0755 ${BINDIR}/tetris /usr/local/bin

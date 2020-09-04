@@ -7,14 +7,15 @@ My ascii/cli rendition of tetris. From Wikipedia:
 
 ## Installation
 
-### Git:
-If on linux, install libncurses-dev as dependency.
+### Source
+If on linux, install `libncursesw5-dev` as dependency.
+
 ```bash
 git clone 'https://github.com/k-vernooy/tetris' && cd tetris
-make  # if on linux, run 'make ubuntucompile' instead for proper characters
+make  # if on linux, run 'make ubuntucompile' instead
 sudo make install
 ```
-### Homebrew:
+### Homebrew
 ```bash
 brew tap k-vernooy/tap
 brew install tetris

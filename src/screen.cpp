@@ -27,7 +27,7 @@ Screen::Screen(int startLevel) {
 void Screen::top() {
     // print the first of the screen line to cover up shape
     move(0,0);
-    printw(readLine(screenstr, 1).c_str());
+    printw(readLine(screenstr, 0).c_str());
 }
 
 void Screen::draw() {

@@ -27,7 +27,7 @@ To begin the game, simply type `tetris` in the terminal. Levels can be specified
 
 ### Control:
 Use the arrow keys to control the falling blocks:  
-- <kbd>e</kdb> to enable/disable the ghost block
+- <kbd>e</kbd> to enable/disable the ghost block
 - <kbd>↑</kbd> to rotate the falling block
 - <kbd>→</kbd> to move right
 - <kbd>←</kbd> to move left

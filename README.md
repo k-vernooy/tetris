@@ -22,8 +22,12 @@ brew install tetris
 ```
 
 ## Usage 
+
+To begin the game, simply type `tetris` in the terminal. Levels can be specified by the flag `--start-level x` (where x is a number 1-25). The ghost block can be turned on from the command line as well, with `--easy`.
+
 ### Control:
 Use the arrow keys to control the falling blocks:  
+- <kbd>e</kdb> to enable/disable the ghost block
 - <kbd>↑</kbd> to rotate the falling block
 - <kbd>→</kbd> to move right
 - <kbd>←</kbd> to move left

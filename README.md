@@ -12,7 +12,7 @@ If on linux, install `libncursesw5-dev` as dependency.
 
 ```bash
 git clone 'https://github.com/k-vernooy/tetris' && cd tetris
-make  # if on linux, run 'make ubuntucompile' instead
+make
 sudo make install
 ```
 ### Homebrew
@@ -27,6 +27,6 @@ Use the arrow keys to control the falling blocks:
 - <kbd>↑</kbd> to rotate the falling block
 - <kbd>→</kbd> to move right
 - <kbd>←</kbd> to move left
-- <kbd>↓</kbd> to soft drop
+- <kbd>↓</kbd> to soft drop. There are known bugs with soft dropping that will be fixed relatively soon. If the program is segfaulting for you, this is likely why.
 - <kbd>SPACE</kbd> to hard drop
 - <kbd>CTRL</kbd>+<kbd>C</kbd> at any time to quit the game

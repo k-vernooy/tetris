@@ -4,8 +4,13 @@ CXX := g++
 BIN := bin
 BUILD := build
 STDV := -std=c++11
-CXXFLAGS := -O2 -MMD -MP 
-OFLAGS := -O2 -MMD -MP 
+CXXFLAGS := -MMD -MP 
+
+ifeq ($(CONFIG),debug)
+    CXXFLAGS += -g3 -ggdb -gstabs+
+else
+    CXXFLAGS += -O2
+endif
 
 OBJECTS := main.o shape.o screen.o game.o functions.o
 OBJECT_OUTPUTS := $(patsubst %, $(BUILD)/%, $(OBJECTS))

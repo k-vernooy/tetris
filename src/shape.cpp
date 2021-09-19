@@ -317,8 +317,10 @@ void Shape::move(int movetype) {
     else if ( movetype == 3) {
         // move down
         for ( int i = 0; i < coords.size(); i += 2 ) {
-            if ( currentWin[coords[i] + 1][coords[i + 1] + 2] != " " ) {
+            int y = coords[i + 1];
+            if ( y >= 18 || currentWin[coords[i] + 1][y + 2] != " " ) {
                 move = false;
+                break;
             }
         }
 

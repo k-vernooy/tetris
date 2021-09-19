@@ -7,7 +7,7 @@ STDV := -std=c++11
 CXXFLAGS := -MMD -MP 
 
 ifeq ($(CONFIG),debug)
-    CXXFLAGS += -g
+    CXXFLAGS += -g3 -ggdb -gstabs+
 else
     CXXFLAGS += -O2
 endif

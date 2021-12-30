@@ -18,8 +18,14 @@ void checkNext(int startLevel, bool easy, string basename) {
         systring += " --easy";
     
     // perform action based on input
-    if ( ch == 'y' )
-        system(systring.c_str()); // call binary
+    if ( ch == 'y' ) {
+        // call binary
+        if (system(systring.c_str()) == -1) {
+            cerr << "Error calling '" << systring << "': "
+                 << strerror(errno) << endl;
+            exit(EXIT_FAILURE);
+        }
+    }
     else if ( ch == 'n' )
         return; // exit out of program
     else // did not input y or n, try again

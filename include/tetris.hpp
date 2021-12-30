@@ -15,6 +15,8 @@
 #include <cstring>
 #include <algorithm>
 #include <unistd.h>
+#include <errno.h>
+#include <cstring>
 
 using namespace std;
 

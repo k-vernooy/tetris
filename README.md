@@ -1,7 +1,5 @@
 # tetris
-My ascii/cli rendition of tetris. From Wikipedia:
-
-> The objective of [tetris] is to manipulate tetriminos, by moving each one sideways and/or rotating by quarter-turns, so that they form a solid horizontal line without gaps
+My ascii/cli rendition of tetris.
 
 <img src=docs/out.gif width=500px>
 

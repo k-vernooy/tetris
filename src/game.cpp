@@ -93,12 +93,7 @@ void game(Shape shape, Screen screen, int startLevel, bool easy, string basename
             }
             // turn on or off guide mode
             else if ( ch == 'e' ) {
-                if ( easy ) {
-                    easy = false;
-                }
-                else {
-                    easy = true;
-                }
+                easy = !easy;
             }
             // instant restart
             else if ( ch == 'r' ) {
